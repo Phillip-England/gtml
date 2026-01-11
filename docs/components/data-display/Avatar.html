@@ -1,0 +1,13 @@
+<div props='name string, src string, size string'>
+  <div class="flex-shrink-0">
+    { src != "" ? (
+      <img class="h-10 w-10 rounded-full object-cover" src="{src}" alt="{name}" />
+    ) : (
+      <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+        <span class="text-sm font-medium text-gray-600">
+          {name.charAt(0).toUpperCase()}
+        </span>
+      </div>
+    ) }
+  </div>
+</div>

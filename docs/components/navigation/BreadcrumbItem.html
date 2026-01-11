@@ -1,0 +1,14 @@
+<div props='href string, text string, isLast boolean'>
+  <li class="flex items-center">
+    { isLast ? (
+      <span class="text-sm text-gray-500">{text}</span>
+    ) : (
+      <>
+        <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z"/>
+        </svg>
+        <a href="{href}" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">{text}</a>
+      </>
+    ) }
+  </li>
+</div>

@@ -1,0 +1,16 @@
+<div props='text string, included boolean'>
+  <li class="flex items-start">
+    <div class="flex-shrink-0">
+      { included ? (
+        <svg class="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      ) : (
+        <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      ) }
+    </div>
+    <p class="ml-3 text-sm text-gray-700">{text}</p>
+  </li>
+</div>

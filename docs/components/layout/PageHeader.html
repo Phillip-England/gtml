@@ -1,0 +1,17 @@
+<div props='title string, subtitle string, breadcrumbs string'>
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      { breadcrumbs != "" ? (
+        <div class="mb-4">{breadcrumbs}</div>
+      ) : (
+        <span></span>
+      ) }
+      <h1 class="text-3xl font-bold text-gray-900">{title}</h1>
+      { subtitle != "" ? (
+        <p class="mt-2 text-sm text-gray-600">{subtitle}</p>
+      ) : (
+        <span></span>
+      ) }
+    </div>
+  </div>
+</div>
