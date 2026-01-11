@@ -44,6 +44,8 @@ var (
 	reSlotPlaceholder = regexp.MustCompile(`(?s)<slot\s+name=['"](\w+)['"]\s*/?>`)
 	// Matches usage of slots in children: <slot name='x' tag='y'>...</slot>
 	reSlotUsage = regexp.MustCompile(`(?s)<slot\s+([^>]+)>(.*?)</slot>`)
+	// Matches {{ slot: name }} in Component Definition
+	reSlotDef = regexp.MustCompile(`\{\{\s*slot:\s*(\w+)\s*\}\}`)
 )
 
 // Data Structures
@@ -145,6 +147,18 @@ func main() {
 			fmt.Println("\n✅ Compilation successful!")
 		}
 
+	case "test":
+		path := ""
+		for _, arg := range os.Args[2:] {
+			if !strings.HasPrefix(arg, "-") && path == "" {
+				path = arg
+			}
+		}
+		if path == "" {
+			path = "."
+		}
+		runTests(path)
+
 	default:
 		printUsage()
 		os.Exit(1)
@@ -156,6 +170,7 @@ func printUsage() {
 	fmt.Println("Usage:")
 	fmt.Println("  gtml init <PATH> [--force]")
 	fmt.Println("  gtml compile <PATH> [--watch]")
+	fmt.Println("  gtml test [PATH]")
 }
 
 // Init Logic
@@ -442,6 +457,16 @@ func compileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 
 		// Prepare component template
 		renderedComp := compDef.Template
+
+		// Convert {{ slot: name }} syntax to <slot name='name' /> for slot injection
+		renderedComp = reSlotDef.ReplaceAllStringFunc(renderedComp, func(match string) string {
+			subMatch := reSlotDef.FindStringSubmatch(match)
+			if len(subMatch) < 2 {
+				return match
+			}
+			slotName := subMatch[1]
+			return "<slot name='" + slotName + "' />"
+		})
 
 		// Evaluate expressions within the component template using its OWN props
 		renderedComp, err = evaluateExpressions(renderedComp, props)
@@ -1471,4 +1496,64 @@ func copyDir(src, dst string) error {
 		}
 		return os.WriteFile(dstPath, data, info.Mode())
 	})
+}
+
+func runTests(basePath string) {
+	fmt.Printf("Running tests in %s...\n", basePath)
+
+	failed := 0
+	passed := 0
+
+	err := filepath.Walk(basePath, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			if path == filepath.Join(basePath, "dist") || path == filepath.Join(basePath, "static") {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+
+		if filepath.Ext(path) != ".html" {
+			return nil
+		}
+
+		if !strings.HasSuffix(path, "-test.html") {
+			return nil
+		}
+
+		relPath, err := filepath.Rel(basePath, path)
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("  Testing %s... ", relPath)
+
+		if err := runCompile(filepath.Dir(path)); err != nil {
+			fmt.Printf("FAILED\n    Error: %v\n", err)
+			failed++
+		} else {
+			fmt.Printf("PASSED\n")
+			passed++
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		fmt.Printf("Error running tests: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("\n--- Test Results ---\n")
+	fmt.Printf("Passed: %d\n", passed)
+	fmt.Printf("Failed: %d\n", failed)
+
+	if failed > 0 {
+		os.Exit(1)
+	}
+
+	fmt.Println("All tests passed!")
 }
