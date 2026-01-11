@@ -52,7 +52,7 @@ func normalizeHTML(s string) string {
 func TestProps_BasicStringProp(t *testing.T) {
 	// Test basic prop substitution with string type
 	state := createTestState(map[string]string{
-		"ThatButton": `<button>{{ prop: title string }}</button>`,
+		"ThatButton": `<button>{{ prop: title }}</button>`,
 	})
 
 	input := `<ThatButton title='some title' />`
@@ -71,7 +71,7 @@ func TestProps_BasicStringProp(t *testing.T) {
 func TestProps_MultipleProps(t *testing.T) {
 	// Test component with multiple props
 	state := createTestState(map[string]string{
-		"Card": `<div><h1>{{ prop: heading string }}</h1><p>{{ prop: subheading string }}</p></div>`,
+		"Card": `<div><h1>{{ prop: heading }}</h1><p>{{ prop: subheading }}</p></div>`,
 	})
 
 	input := `<Card heading='Hello' subheading='World' />`
@@ -90,7 +90,7 @@ func TestProps_MultipleProps(t *testing.T) {
 func TestProps_IntType(t *testing.T) {
 	// Test prop with int type
 	state := createTestState(map[string]string{
-		"Counter": `<span>Count: {{ prop: count int }}</span>`,
+		"Counter": `<span>Count: {{ prop: count }}</span>`,
 	})
 
 	input := `<Counter count='42' />`
@@ -109,7 +109,7 @@ func TestProps_IntType(t *testing.T) {
 func TestProps_MissingPropValue(t *testing.T) {
 	// When a prop is defined but not passed, it should render empty
 	state := createTestState(map[string]string{
-		"Greeting": `<div>Hello {{ prop: name string }}</div>`,
+		"Greeting": `<div>Hello {{ prop: name }}</div>`,
 	})
 
 	input := `<Greeting />`
@@ -128,7 +128,7 @@ func TestProps_MissingPropValue(t *testing.T) {
 func TestProps_DoubleQuotes(t *testing.T) {
 	// Test that double quotes work for attribute values
 	state := createTestState(map[string]string{
-		"Message": `<p>{{ prop: text string }}</p>`,
+		"Message": `<p>{{ prop: text }}</p>`,
 	})
 
 	input := `<Message text="Hello World" />`
@@ -147,7 +147,7 @@ func TestProps_DoubleQuotes(t *testing.T) {
 func TestProps_NonSelfClosingComponent(t *testing.T) {
 	// Test non-self-closing component with children
 	state := createTestState(map[string]string{
-		"Wrapper": `<div class="wrap">{{ prop: title string }}</div>`,
+		"Wrapper": `<div class="wrap">{{ prop: title }}</div>`,
 	})
 
 	input := `<Wrapper title="Test Title"></Wrapper>`
@@ -166,7 +166,7 @@ func TestProps_NonSelfClosingComponent(t *testing.T) {
 func TestProps_NestedComponents(t *testing.T) {
 	// Test nested component resolution
 	state := createTestState(map[string]string{
-		"Inner":  `<span>{{ prop: value string }}</span>`,
+		"Inner":  `<span>{{ prop: value }}</span>`,
 		"Outer":  `<div><Inner value='nested' /></div>`,
 	})
 
@@ -190,8 +190,8 @@ func TestProps_NestedComponents(t *testing.T) {
 func TestDrill_BasicDrilling(t *testing.T) {
 	// Test basic prop drilling from parent to child
 	state := createTestState(map[string]string{
-		"SomeComponent": `<div><p>{{ prop: text string }}</p></div>`,
-		"SomeLayout": `<div><h1>{{ prop: heading string }}</h1><SomeComponent text="{{ drill: heading }}" /></div>`,
+		"SomeComponent": `<div><p>{{ prop: text }}</p></div>`,
+		"SomeLayout": `<div><h1>{{ prop: heading }}</h1><SomeComponent text="{{ drill: heading }}" /></div>`,
 	})
 
 	input := `<SomeLayout heading='some heading' />`
@@ -210,7 +210,7 @@ func TestDrill_BasicDrilling(t *testing.T) {
 func TestDrill_MultiLevelDrilling(t *testing.T) {
 	// Test drilling through multiple component levels
 	state := createTestState(map[string]string{
-		"DeepComponent":   `<span>{{ prop: value string }}</span>`,
+		"DeepComponent":   `<span>{{ prop: value }}</span>`,
 		"MiddleComponent": `<div><DeepComponent value="{{ drill: data }}" /></div>`,
 		"TopComponent":    `<section><MiddleComponent data="{{ drill: info }}" /></section>`,
 	})
@@ -232,7 +232,7 @@ func TestDrill_MultiLevelDrilling(t *testing.T) {
 func TestDrill_MultipleDrills(t *testing.T) {
 	// Test drilling multiple props to same child
 	state := createTestState(map[string]string{
-		"Display": `<div><h1>{{ prop: title string }}</h1><p>{{ prop: desc string }}</p></div>`,
+		"Display": `<div><h1>{{ prop: title }}</h1><p>{{ prop: desc }}</p></div>`,
 		"Container": `<article><Display title="{{ drill: heading }}" desc="{{ drill: description }}" /></article>`,
 	})
 
@@ -252,7 +252,7 @@ func TestDrill_MultipleDrills(t *testing.T) {
 func TestDrill_MissingDrillSource(t *testing.T) {
 	// When drilling a prop that doesn't exist, it should render empty
 	state := createTestState(map[string]string{
-		"Child":  `<p>{{ prop: text string }}</p>`,
+		"Child":  `<p>{{ prop: text }}</p>`,
 		"Parent": `<div><Child text="{{ drill: nonexistent }}" /></div>`,
 	})
 
@@ -272,7 +272,7 @@ func TestDrill_MissingDrillSource(t *testing.T) {
 func TestDrill_MixedDrillAndLiteral(t *testing.T) {
 	// Test component with both drilled and literal props
 	state := createTestState(map[string]string{
-		"Item": `<li>{{ prop: label string }} - {{ prop: value string }}</li>`,
+		"Item": `<li>{{ prop: label }} - {{ prop: value }}</li>`,
 		"List": `<ul><Item label='Fixed Label' value="{{ drill: dynamicValue }}" /></ul>`,
 	})
 
@@ -372,7 +372,7 @@ func TestSlot_EmptySlot(t *testing.T) {
 func TestSlot_NestedComponentInSlot(t *testing.T) {
 	// Test that components inside slots are resolved
 	state := createTestState(map[string]string{
-		"Button": `<button>{{ prop: label string }}</button>`,
+		"Button": `<button>{{ prop: label }}</button>`,
 		"Card":   `<div class="card">{{ slot: actions }}</div>`,
 	})
 
@@ -434,8 +434,8 @@ func TestError_ComponentNotFound(t *testing.T) {
 func TestCombined_SlotWithDrilledProp(t *testing.T) {
 	// Test using drilled props inside slotted content
 	state := createTestState(map[string]string{
-		"Button":    `<button>{{ prop: text string }}</button>`,
-		"Container": `<div>{{ prop: title string }}{{ slot: content }}</div>`,
+		"Button":    `<button>{{ prop: text }}</button>`,
+		"Container": `<div>{{ prop: title }}{{ slot: content }}</div>`,
 	})
 
 	// This tests the integration from the spec example
@@ -455,8 +455,8 @@ func TestCombined_SlotWithDrilledProp(t *testing.T) {
 func TestCombined_FullLayoutExample(t *testing.T) {
 	// Test the full example from the spec
 	state := createTestState(map[string]string{
-		"BasicButton": `<button>{{ prop: text string }}</button>`,
-		"GuestLayout": `<html><head><title>{{ prop: title string }}</title></head><body><BasicButton text='{{ drill: title }}' />{{ slot: content }}</body></html>`,
+		"BasicButton": `<button>{{ prop: text }}</button>`,
+		"GuestLayout": `<html><head><title>{{ prop: title }}</title></head><body><BasicButton text='{{ drill: title }}' />{{ slot: content }}</body></html>`,
 	})
 
 	input := `<GuestLayout title="Some Title"><slot name='content' tag='div'><p>Some Content</p><BasicButton text='Click Me' /></slot></GuestLayout>`
@@ -696,7 +696,7 @@ func TestEdge_ComponentWithNoProps(t *testing.T) {
 
 func TestEdge_DeeplyNestedComponents(t *testing.T) {
 	state := createTestState(map[string]string{
-		"Level3": `<span>{{ prop: val string }}</span>`,
+		"Level3": `<span>{{ prop: val }}</span>`,
 		"Level2": `<p><Level3 val='{{ drill: data }}' /></p>`,
 		"Level1": `<div><Level2 data='{{ drill: input }}' /></div>`,
 	})
@@ -716,7 +716,7 @@ func TestEdge_DeeplyNestedComponents(t *testing.T) {
 
 func TestEdge_MultipleComponentsInRoute(t *testing.T) {
 	state := createTestState(map[string]string{
-		"Para": `<p>{{ prop: text string }}</p>`,
+		"Para": `<p>{{ prop: text }}</p>`,
 	})
 
 	input := `<div><Para text='First' /><Para text='Second' /></div>`
@@ -734,7 +734,7 @@ func TestEdge_MultipleComponentsInRoute(t *testing.T) {
 
 func TestEdge_ComponentWithTextAround(t *testing.T) {
 	state := createTestState(map[string]string{
-		"Bold": `<strong>{{ prop: text string }}</strong>`,
+		"Bold": `<strong>{{ prop: text }}</strong>`,
 	})
 
 	input := `<p>Hello <Bold text='World' /> and goodbye</p>`

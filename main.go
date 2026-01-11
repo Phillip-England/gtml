@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -28,8 +27,8 @@ const (
 
 // Regex patterns for DSL
 var (
-	// Matches {{ prop: name type }}
-	rePropDef = regexp.MustCompile(`\{\{\s*prop:\s*(\w+)\s+(\w+)\s*\}\}`)
+	// Matches {{ prop: name }}
+	rePropDef = regexp.MustCompile(`\{\{\s*prop:\s*(\w+)\s*\}\}`)
 	// Matches {{ drill: name }}
 	reDrill = regexp.MustCompile(`\{\{\s*drill:\s*(\w+)\s*\}\}`)
 	// Matches {{ slot: name }}
@@ -144,12 +143,12 @@ func runInit(basePath string, force bool) {
 
 	files := map[string]string{
 		filepath.Join(basePath, DirComponents, "BasicButton.html"):
-`<button>{{ prop: text string }}</button>`,
+`<button>{{ prop: text }}</button>`,
 
 		filepath.Join(basePath, DirComponents, "GuestLayout.html"):
 `<html>
   <head>
-    <title>{{ prop: title string }}</title>
+    <title>{{ prop: title }}</title>
   </head>
   <body>
     <BasicButton text='{{ drill: title }}' />
@@ -407,24 +406,16 @@ func compileHTML(html string, state *GlobalState, scopeProps map[string]interfac
 		// 1. Fill Props
 		renderedComp := compDef.Template
 
-		// Replace {{ prop: name type }}
+		// Replace {{ prop: name }}
 		// We use a func replace to handle logic
 		renderedComp = rePropDef.ReplaceAllStringFunc(renderedComp, func(s string) string {
 			m := rePropDef.FindStringSubmatch(s)
 			pName := m[1]
-			pType := m[2]
 
 			val, ok := resolvedProps[pName]
 			if !ok {
 				// return empty or error? Prompt doesn't specify strict prop failure, assuming empty.
 				return ""
-			}
-
-			// Type check (basic)
-			if pType == "int" {
-				if _, err := strconv.Atoi(fmt.Sprintf("%v", val)); err != nil {
-					fmt.Printf("Warning: Prop '%s' expected int, got '%v'\n", pName, val)
-				}
 			}
 
 			return fmt.Sprintf("%v", val)

@@ -53,14 +53,14 @@ The html files within the initalized project will look as follows:
 
 `./myapp/components/BasicButton.html`
 ```html
-<button>{{ prop: text string }}</button>
+<button>{{ prop: text }}</button>
 ```
 
 `./myapp/components/GuestLayout.html`
 ```html
 <html>
   <head>
-    <title>{{ prop: title string }}</title>
+    <title>{{ prop: title }}</title>
   </head>
   <body>
   <BasicButton text='{{ drill: title }}' />
@@ -178,8 +178,8 @@ Here is an example of a basic component:
 </style>
 
 <div>
-  <h1>{{ prop: heading string }}</h1>
-  <p>{{ prop: subheading string  }}</p>
+  <h1>{{ prop: heading }}</h1>
+  <p>{{ prop: subheading }}</p>
 <div>
 ```
 
@@ -191,19 +191,16 @@ Take note of the `{{ prop: ... }}` syntax. This is called a `prop` and more info
 =====================================
 
 ## Found Within Components
-`props` are found within components and are indicated by their use of double brackets in conjunction with the `prop` keywork like so: `{{ prop: }}`. 
+`props` are found within components and are indicated by their use of double brackets in conjunction with the `prop` keyword like so: `{{ prop: name }}`.
 
-## Name and Type Required
-All `props` require a `name` and a `type`.
-
-## Available Types
-`string` and `int` are the only available types.
+## Name Required
+All `props` require a `name`.
 
 ## Full example
-Here is a full example of a component which makes use of a `prop` with the name being `text` and the type being `string`:
+Here is a full example of a component which makes use of a `prop` with the name being `text`:
 
 ```html
-<button>{{ prop: text string }}</button>
+<button>{{ prop: text }}</button>
 ```
 
 =====================================
@@ -216,14 +213,14 @@ Imagine the following situation: we have a component which already accepts a `pr
 Here is `./myapp/components/AnotherComponentAgain.html`
 ```html
 <div>
-  <p>{{ prop: text string }}</p>
+  <p>{{ prop: text }}</p>
 </div>
 ```
 
 Here is `./myapp/components/AnotherComponent.html`
 ```html
 <div>
-  <p>{{ prop: text string }}</p>
+  <p>{{ prop: text }}</p>
   <AnotherComponentAgain text="{{ drill: text }}" />
 </div>
 ```
@@ -231,7 +228,7 @@ Here is `./myapp/components/AnotherComponent.html`
 And now, we use that component in `./myapp/components/SomeComponent.html`
 ```html
 <div>
-  {{ prop: title string }}
+  {{ prop: title }}
   <AnotherComponent text="{{ drill: title }}" />
 </div>
 ```
@@ -256,7 +253,7 @@ Look at this component:
 ```html
 <html>
   <head>
-    <title>{{ prop: title string }}</title>
+    <title>{{ prop: title }}</title>
   </head>
   <body>
     <nav>
@@ -307,7 +304,7 @@ We should create numerous tests to ensure `props` are piped into components corr
 
 Take this component:
 ```html
-<button>{{ prop: title string }}</button>
+<button>{{ prop: title }}</button>
 ```
 
 If I use it like this:
@@ -322,20 +319,14 @@ I should get:
 
 I need multiple tests like that. I also need tests which check for edge cases and failure like this:
 
+What happens if we have two props with the same name like this:
+
 ```html
+<div>{{ prop: title }}</div>
 <div>{{ prop: title }}</div>
 ```
 
-See how that doesn't include a type? Well, that should error and we need to test for these things.
-
-Also, what happens if  we have two props with the same name but different types like this:
-
-```html
-<div>{{ prop: title string }}</div>
-<div>{{ prop: title int }}</div>
-```
-
-Well, that should error out as well and is not allowed when using gtml.
+Well, that should error out as well since duplicate prop names are not allowed when using gtml.
 
 =====================================
 # Testing Prop Drilling
@@ -345,7 +336,7 @@ Well, that should error out as well and is not allowed when using gtml.
 
 ```html
 <div>
-  <p>{{ prop: text string }}</p>
+  <p>{{ prop: text }}</p>
 </div>
 ```
 
@@ -353,7 +344,7 @@ And then this layout, `SomeLayout`:
 
 ```html
 <div>
-  <h1>{{ prop: heading string }}</h1>
+  <h1>{{ prop: heading }}</h1>
   <SomeComponent text="{{ drill: heading }}" />
 </div>
 ```
@@ -373,7 +364,7 @@ Well, that should produce:
 </div>
 ```
 
-We need multiple tests to ensure prop drilling is working as expected. However, what if we try to drill a `string` into an `int` or vice-versa, well in that case we should expect an error. Check for that and multiple other types of errors.
+We need multiple tests to ensure prop drilling is working as expected. We should also test what happens when drilling a prop that doesn't exist - it should render empty or handle gracefully.
 
 =====================================
 # Testing Slots
