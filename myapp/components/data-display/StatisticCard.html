@@ -1,0 +1,14 @@
+<div props='label string, value string, change string, changeType string'>
+  <div class="bg-white overflow-hidden shadow rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-sm font-medium text-gray-500 truncate">{label}</dt>
+      <dd class="mt-1 text-3xl font-semibold text-gray-900">{value}</dd>
+      <dd class="mt-2 flex items-center text-sm">
+        <span class="{changeType == 'positive' ? 'text-green-600' : 'text-red-600'}">
+          {change}
+        </span>
+        <span class="text-gray-500 ml-2">from last month</span>
+      </dd>
+    </div>
+  </div>
+<div>

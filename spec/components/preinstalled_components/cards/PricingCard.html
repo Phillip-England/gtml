@@ -1,0 +1,28 @@
+<div props='name string, price string, features string, buttonText string, isPopular boolean'>
+  <div class="{isPopular ? 'border-2 border-blue-500 rounded-lg shadow-lg relative' : 'border border-gray-200 rounded-lg shadow'}">
+    {isPopular ? (
+      <div class="absolute top-0 right-0 -mr-1 -mt-1 w-20 h-20 overflow-hidden">
+        <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 transform rotate-45 translate-x-8 translate-y-8">
+          Popular
+        </div>
+      </div>
+    ) : (
+      <span></span>
+    ) }
+    <div class="p-6">
+      <h3 class="text-lg font-medium text-gray-900">{name}</h3>
+      <div class="mt-4">
+        <span class="text-4xl font-extrabold text-gray-900">{price}</span>
+        <span class="text-base font-medium text-gray-500">/mo</span>
+      </div>
+      <ul class="mt-6 space-y-4">
+        {features}
+      </ul>
+      <div class="mt-6">
+        <a href="#" class="w-full block bg-blue-600 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-blue-700">
+          {buttonText}
+        </a>
+      </div>
+    </div>
+  </div>
+<div>

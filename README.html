@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gtml - Static Site Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans leading-relaxed">
+    <header class="bg-indigo-600 text-white py-16">
+        <div class="max-w-4xl mx-auto px-6">
+            <h1 class="text-5xl font-bold mb-4">gtml</h1>
+            <p class="text-xl text-indigo-100">A Static Site Generator & Templating System</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">What is gtml?</h2>
+            <p class="text-lg mb-4">gtml is an opinionated static site generator which compiles components and routes into static HTML assets. It's centered around HTML generation, making reusable bits of HTML which you can use throughout your entire webpage.</p>
+            <p class="text-lg">gtml takes in your routes, resolves the components found within, and compiles everything into static HTML.</p>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Installation</h2>
+            <div class="bg-gray-900 text-gray-100 rounded-lg p-6 font-mono text-sm overflow-x-auto">
+                <p class="text-green-400"># Build from source</p>
+                <p>go build -o gtml main.go</p>
+                <p class="text-green-400 mt-4"># Or install globally</p>
+                <p>go install main.go</p>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Quick Start</h2>
+            <div class="space-y-4">
+                <div class="bg-gray-900 text-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <p># Initialize a new project</p>
+                    <p class="text-green-400">gtml init myapp</p>
+                </div>
+                <div class="bg-gray-900 text-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <p># Compile the project</p>
+                    <p class="text-green-400">gtml compile myapp</p>
+                </div>
+                <div class="bg-gray-900 text-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <p># Watch for changes and recompile</p>
+                    <p class="text-green-400">gtml compile myapp --watch</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Project Structure</h2>
+            <p class="mb-4">gtml expects a very specific project structure:</p>
+            <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                <pre class="text-gray-700">
+./myapp
+./myapp/components       # Component definitions
+./myapp/routes           # Page routes
+./myapp/static           # Static assets
+./myapp/dist             # Compiled output</pre>
+            </div>
+            <p class="mt-4 text-sm text-gray-600">These directories form the foundation of a gtml application and are required. Without these directories, gtml will fail to compile.</p>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">CLI Commands</h2>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">init</h3>
+                <p class="mb-4">Initialize a new gtml project at the specified path:</p>
+                <div class="bg-gray-900 text-gray-100 rounded-lg p-6 font-mono text-sm mb-4">
+                    <p>gtml init &lt;PATH&gt; [--force]</p>
+                </div>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li><code class="bg-gray-200 px-2 py-1 rounded text-sm">PATH</code> - The directory path where the project will be created</li>
+                    <li><code class="bg-gray-200 px-2 py-1 rounded text-sm">--force</code> - Overwrite existing directory if it exists</li>
+                </ul>
+                <p class="mt-4 text-sm text-gray-600">Example: <code class="bg-gray-200 px-2 py-1 rounded text-sm">gtml init myapp</code> creates a new project with sample components and routes.</p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">compile</h3>
+                <p class="mb-4">Compile routes and components into static HTML:</p>
+                <div class="bg-gray-900 text-gray-100 rounded-lg p-6 font-mono text-sm mb-4">
+                    <p>gtml compile &lt;PATH&gt; [--watch]</p>
+                </div>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li><code class="bg-gray-200 px-2 py-1 rounded text-sm">PATH</code> - The path to the gtml project</li>
+                    <li><code class="bg-gray-200 px-2 py-1 rounded text-sm">--watch</code> - Watch for file changes and recompile automatically</li>
+                </ul>
+                <p class="mt-4 text-sm text-gray-600">Compiled output will be placed in the <code class="bg-gray-200 px-2 py-1 rounded text-sm">dist</code> directory.</p>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Components</h2>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">Basic Component</h3>
+                <p class="mb-4">Components exist within the <code class="bg-gray-200 px-2 py-1 rounded text-sm">components</code> directory and contain a single HTML component file:</p>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+<!-- components/Header.html -->
+&lt;header props='title string'&gt;
+  &lt;h1&gt;{title}&lt;/h1&gt;
+&lt;/header&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">Component Naming Rules</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Component files must be named in <strong>PascalCase</strong> (e.g., <code class="bg-gray-200 px-2 py-1 rounded text-sm">Header.html</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">UserCard.html</code>)</li>
+                    <li>Subdirectories are allowed (e.g., <code class="bg-gray-200 px-2 py-1 rounded text-sm">components/layouts/MainLayout.html</code>)</li>
+                    <li>Components are accessed by their filename, not their path</li>
+                    <li>Component names must be unique across the entire components directory</li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">Component Structure Rules</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Each component must have a <strong>single root element</strong></li>
+                    <li>Components can contain an optional <code class="bg-gray-200 px-2 py-1 rounded text-sm">&lt;style&gt;</code> block at the top</li>
+                    <li>The <code class="bg-gray-200 px-2 py-1 rounded text-sm">props</code> attribute defines the component's dynamic data</li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">Using Components</h3>
+                <p class="mb-4">Components are used as HTML tags with PascalCase names:</p>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;Header title="Welcome" /&gt;
+&lt;UserCard name="John" age={30} /&gt;</pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Props</h2>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">Defining Props</h3>
+                <p class="mb-4">The props attribute is formatted as <code class="bg-gray-200 px-2 py-1 rounded text-sm">'PROPNAME PROPTYPE, PROPNAME PROPTYPE'</code>:</p>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;div props='name string, age int, isActive boolean'&gt;
+  &lt;p&gt;{name} is {age} years old&lt;/p&gt;
+&lt;/div&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">Prop Types</h3>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold mb-2 text-gray-600">String</h4>
+                    <p class="mb-2">Can be passed as raw string or expression:</p>
+                    <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                        <pre class="text-gray-800">
+&lt;!-- Both are valid --&gt;
+&lt;User name="John" /&gt;
+&lt;User name={"John"} /&gt;</pre>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold mb-2 text-gray-600">Int</h4>
+                    <p class="mb-2">Must be passed as an expression:</p>
+                    <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                        <pre class="text-gray-800">
+&lt;Counter value={42} /&gt;
+&lt;Counter value={10 + 5} /&gt;  &lt;!-- Evaluates to 15 --&gt;</pre>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold mb-2 text-gray-600">Boolean</h4>
+                    <p class="mb-2">Must be passed as an expression:</p>
+                    <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                        <pre class="text-gray-800">
+&lt;Button disabled={true} /&gt;
+&lt;Button disabled={isEnabled == false} /&gt;</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Expressions</h2>
+            <p class="mb-4">Expressions are indicated by <code class="bg-gray-200 px-2 py-1 rounded text-sm">{}</code> and are evaluated during compilation. They can be used in text content and attribute values.</p>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Text Content</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;p&gt;Hello, {name}!&lt;/p&gt;
+&lt;p&gt;2 + 2 = {2 + 2}&lt;/p&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Attribute Values</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;img src={imageUrl} /&gt;
+&lt;button class={isActive ? 'active' : 'inactive'}&gt;Click&lt;/button&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Supported Operations</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Arithmetic: <code class="bg-gray-200 px-2 py-1 rounded text-sm">+</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">-</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">*</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">/</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">%</code></li>
+                    <li>Comparison: <code class="bg-gray-200 px-2 py-1 rounded text-sm">==</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">!=</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">&lt;</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">&gt;</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">&lt;=</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">&gt;=</code></li>
+                    <li>Logical: <code class="bg-gray-200 px-2 py-1 rounded text-sm">&&</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">||</code></li>
+                    <li>String concatenation: <code class="bg-gray-200 px-2 py-1 rounded text-sm">"hello" + " " + "world"</code></li>
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Ternary Operator</h3>
+                <p class="mb-2">Conditional rendering using ternary expressions:</p>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+{ isLoggedIn ? (
+  &lt;p&gt;Welcome back!&lt;/p&gt;
+) : (
+  &lt;p&gt;Please log in.&lt;/p&gt;
+) }</pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Slots</h2>
+            <p class="mb-4">Slots allow you to insert content into components at designated places. This is useful for creating reusable layouts.</p>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Defining Slots in Components</h3>
+                <p class="mb-2">Use the <code class="bg-gray-200 px-2 py-1 rounded text-sm">&lt;slot name='slotname' /&gt;</code> syntax:</p>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;!-- components/PageLayout.html --&gt;
+&lt;html props='title string'&gt;
+  &lt;head&gt;
+    &lt;title&gt;{title}&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;nav&gt;Navigation&lt;/nav&gt;
+    &lt;slot name='content' /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Using Slots</h3>
+                <p class="mb-2">Pass content to a named slot using the <code class="bg-gray-200 px-2 py-1 rounded text-sm">tag</code> attribute:</p>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;PageLayout title="My Page"&gt;
+  &lt;slot name='content' tag='main'&gt;
+    &lt;h1&gt;Welcome&lt;/h1&gt;
+    &lt;p&gt;This is the main content.&lt;/p&gt;
+  &lt;/slot&gt;
+&lt;/PageLayout&gt;</pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Styling</h2>
+            <p class="mb-4">Components can include CSS styles in a <code class="bg-gray-200 px-2 py-1 rounded text-sm">&lt;style&gt;</code> block. Styles are automatically scoped to the component.</p>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Component Styles</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;style&gt;
+  h1 {
+    color: blue;
+    font-size: 2rem;
+  }
+  .card {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+&lt;/style&gt;
+
+&lt;div class="card"&gt;
+  &lt;h1&gt;{title}&lt;/h1&gt;
+&lt;/div&gt;</pre>
+                </div>
+                <p class="mt-4 text-sm text-gray-600">Styles are compiled to a single <code class="bg-gray-200 px-2 py-1 rounded text-sm">styles.css</code> file in <code class="bg-gray-200 px-2 py-1 rounded text-sm">dist/static/</code> with unique scope IDs to prevent conflicts.</p>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Routes</h2>
+            <p class="mb-4">Routes are HTML files in the <code class="bg-gray-200 px-2 py-1 rounded text-sm">routes</code> directory that define your pages.</p>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Route Naming Rules</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Route files must be named in <strong>kebab-case</strong> (e.g., <code class="bg-gray-200 px-2 py-1 rounded text-sm">about.html</code>, <code class="bg-gray-200 px-2 py-1 rounded text-sm">contact-us.html</code>)</li>
+                    <li><code class="bg-gray-200 px-2 py-1 rounded text-sm">index.html</code> is a special case for the home page</li>
+                    <li>Subdirectories are supported and mirrored in the output</li>
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Route Output</h3>
+                <p class="mb-4">Compiled routes mirror the routes directory structure:</p>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+./routes/index.html        → ./dist/index.html
+./routes/about.html        → ./dist/about.html
+./routes/blog/post.html    → ./dist/blog/post.html</pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Static Assets</h2>
+            <p class="mb-4">Place static files (images, fonts, additional CSS, etc.) in the <code class="bg-gray-200 px-2 py-1 rounded text-sm">static</code> directory. These are copied to <code class="bg-gray-200 px-2 py-1 rounded text-sm">dist/static</code> during compilation.</p>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-600">Complete Example</h2>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Project Structure</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+./myapp/
+├── components/
+│   ├── Header.html
+│   └── Card.html
+├── routes/
+│   └── index.html
+└── static/</pre>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">components/Header.html</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;style&gt;
+  header {
+    background: #333;
+    color: white;
+    padding: 1rem;
+  }
+&lt;/style&gt;
+
+&lt;header props='title string'&gt;
+  &lt;h1&gt;{title}&lt;/h1&gt;
+&lt;/header&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">components/Card.html</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;style&gt;
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+&lt;/style&gt;
+
+&lt;div props='heading string, content string' class="card"&gt;
+  &lt;h2&gt;{heading}&lt;/h2&gt;
+  &lt;p&gt;{content}&lt;/p&gt;
+&lt;/div&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">routes/index.html</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;Header title="My Website" /&gt;
+
+&lt;main&gt;
+  &lt;Card heading="Welcome" content="This is my first gtml page!" /&gt;
+&lt;/main&gt;</pre>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Compiled Output (dist/index.html)</h3>
+                <div class="bg-gray-100 rounded-lg p-6 font-mono text-sm">
+                    <pre class="text-gray-800">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="/static/styles.css"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;header data-header=""&gt;
+      &lt;h1 data-header=""&gt;My Website&lt;/h1&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+      &lt;div data-card="" class="card"&gt;
+        &lt;h2 data-card=""&gt;Welcome&lt;/h2&gt;
+        &lt;p data-card=""&gt;This is my first gtml page!&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <p>gtml - A Static Site Generator built with Go</p>
+        </div>
+    </footer>
+</body>
+</html>

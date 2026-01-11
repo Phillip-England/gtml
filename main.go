@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 	"io/fs"
 	"os"
@@ -16,11 +15,12 @@ import (
 
 // Directory and File Constants
 const (
-	DirComponents = "components"
-	DirRoutes     = "routes"
-	DirDist       = "dist"
-	DirStatic     = "static"
-	FileStyleCSS  = "styles.css"
+	DirComponents   = "components"
+	DirRoutes       = "routes"
+	DirDist         = "dist"
+	DirStatic       = "static"
+	FileStyleCSS    = "styles.css"
+	DirPreinstalled = "spec/components/preinstalled_components"
 )
 
 // Prop Type Constants
@@ -55,11 +55,11 @@ type PropDef struct {
 
 type Component struct {
 	Name        string
-	RawContent  string         // Original file content
-	Template    string         // HTML after stripping style and props attr
-	Styles      string         // Raw CSS content
-	ScopedStyle string         // Compiled/Scoped CSS
-	ScopeID     string         // Unique ID for scoping
+	RawContent  string // Original file content
+	Template    string // HTML after stripping style and props attr
+	Styles      string // Raw CSS content
+	ScopedStyle string // Compiled/Scoped CSS
+	ScopeID     string // Unique ID for scoping
 	Path        string
 	PropDefs    map[string]PropDef // Prop definitions from props attribute
 }
@@ -103,31 +103,39 @@ func main() {
 
 	switch command {
 	case "init":
-		initCmd := flag.NewFlagSet("init", flag.ExitOnError)
-		forceFlag := initCmd.Bool("force", false, "Overwrite existing directory")
-		initCmd.Parse(os.Args[2:])
-
-		if initCmd.NArg() < 1 {
+		force := false
+		path := ""
+		for _, arg := range os.Args[2:] {
+			if arg == "--force" {
+				force = true
+			} else if !strings.HasPrefix(arg, "-") && path == "" {
+				path = arg
+			}
+		}
+		if path == "" {
 			fmt.Println("Error: Missing path argument for init.")
 			fmt.Println("Usage: gtml init <PATH> [--force]")
 			os.Exit(1)
 		}
-		path := initCmd.Arg(0)
-		runInit(path, *forceFlag)
+		runInit(path, force)
 
 	case "compile":
-		compileCmd := flag.NewFlagSet("compile", flag.ExitOnError)
-		watchFlag := compileCmd.Bool("watch", false, "Watch for changes")
-		compileCmd.Parse(os.Args[2:])
-
-		if compileCmd.NArg() < 1 {
+		watch := false
+		path := ""
+		for _, arg := range os.Args[2:] {
+			if arg == "--watch" {
+				watch = true
+			} else if !strings.HasPrefix(arg, "-") && path == "" {
+				path = arg
+			}
+		}
+		if path == "" {
 			fmt.Println("Error: Missing path argument for compile.")
 			fmt.Println("Usage: gtml compile <PATH> [--watch]")
 			os.Exit(1)
 		}
-		path := compileCmd.Arg(0)
 
-		if *watchFlag {
+		if watch {
 			runWatch(path)
 		} else {
 			if err := runCompile(path); err != nil {
@@ -156,6 +164,10 @@ func runInit(basePath string, force bool) {
 	if _, err := os.Stat(basePath); err == nil && !force {
 		fmt.Printf("Error: Directory '%s' already exists. Use --force to overwrite.\n", basePath)
 		os.Exit(1)
+	}
+
+	if force {
+		os.RemoveAll(basePath)
 	}
 
 	dirs := []string{
@@ -197,12 +209,58 @@ func runInit(basePath string, force bool) {
 		}
 	}
 
+	// Copy preinstalled components
+	if err := copyPreinstalledComponents(basePath); err != nil {
+		fmt.Printf("Warning: Failed to copy preinstalled components: %v\n", err)
+	}
+
 	// Attempt initial compilation to ensure generated code works
 	if err := runCompile(basePath); err != nil {
 		fmt.Printf("Warning: Initial compilation failed: %v\n", err)
 	} else {
 		fmt.Printf("Initialized gtml project at %s\n", basePath)
 	}
+}
+
+func copyPreinstalledComponents(basePath string) error {
+	srcDir := DirPreinstalled
+	dstDir := filepath.Join(basePath, DirComponents)
+
+	if _, err := os.Stat(srcDir); os.IsNotExist(err) {
+		return fmt.Errorf("preinstalled components directory not found: %s", srcDir)
+	}
+
+	return filepath.Walk(srcDir, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		if filepath.Ext(path) != ".html" {
+			return nil
+		}
+
+		relPath, err := filepath.Rel(srcDir, path)
+		if err != nil {
+			return err
+		}
+
+		dstPath := filepath.Join(dstDir, relPath)
+
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+
+		if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
+			return err
+		}
+
+		return os.WriteFile(dstPath, content, 0644)
+	})
 }
 
 // Compilation Logic
@@ -1356,12 +1414,12 @@ func runWatch(basePath string) {
 
 		if needsCompile {
 			fmt.Println("Change detected. Compiling...")
-			lastMod = time.Now()
 			if err := runCompile(basePath); err != nil {
 				fmt.Printf("❌ Compile Error: %v\n", err)
 			} else {
 				fmt.Println("✅ Built successfully.")
 			}
+			lastMod = time.Now()
 		}
 	}
 }

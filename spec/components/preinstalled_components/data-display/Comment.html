@@ -1,0 +1,16 @@
+<div props='author string, date string, content string, avatarUrl string'>
+  <div class="flex space-x-3">
+    <div class="flex-shrink-0">
+      <img class="h-10 w-10 rounded-full" src="{avatarUrl}" alt="{author}" />
+    </div>
+    <div class="flex-1 bg-gray-50 rounded-lg px-4 py-2">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-medium text-gray-900">{author}</h3>
+        <p class="text-sm text-gray-500">{date}</p>
+      </div>
+      <div class="mt-1 text-sm text-gray-700">
+        <p>{content}</p>
+      </div>
+    </div>
+  </div>
+<div>

@@ -1,0 +1,49 @@
+<div props='stepNumber int, label string, description string, isCompleted boolean, isCurrent boolean'>
+  <li class="{stepNumber < 3 ? 'pr-8' : ''} relative">
+    <div class="flex items-center">
+      { isCompleted ? (
+        <div class="relative flex items-center justify-center">
+          <div class="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
+            <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div class="absolute top-8 left-1/2 transform -translate-x-1/2 w-32 text-center">
+            <p class="text-sm font-medium text-gray-900">{label}</p>
+          </div>
+        </div>
+      ) : isCurrent ? (
+        <div class="relative flex items-center justify-center">
+          <div class="h-8 w-8 bg-white border-2 border-blue-600 rounded-full flex items-center justify-center">
+            <span class="h-2.5 w-2.5 bg-blue-600 rounded-full"></span>
+          </div>
+          <div class="absolute top-8 left-1/2 transform -translate-x-1/2 w-32 text-center">
+            <p class="text-sm font-medium text-blue-600">{label}</p>
+          </div>
+        </div>
+      ) : (
+        <div class="relative flex items-center justify-center">
+          <div class="h-8 w-8 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center">
+            <span class="h-2.5 w-2.5 bg-transparent rounded-full"></span>
+          </div>
+          <div class="absolute top-8 left-1/2 transform -translate-x-1/2 w-32 text-center">
+            <p class="text-sm font-medium text-gray-500">{label}</p>
+          </div>
+        </div>
+      ) }
+    </div>
+    { stepNumber < 3 ? (
+      <div class="hidden md:block absolute top-4 left-1/2 w-full" aria-hidden="true">
+        <div class="h-0.5 w-full bg-gray-200">
+          { isCompleted ? (
+            <div class="h-0.5 w-full bg-blue-600"></div>
+          ) : (
+            <div class="h-0.5 w-full bg-gray-200"></div>
+          ) }
+        </div>
+      </div>
+    ) : (
+      <span></span>
+    ) }
+  </li>
+<div>
