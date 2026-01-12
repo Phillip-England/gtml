@@ -1,11 +1,165 @@
-<html data-guestlayout="">
+<html data-docslayout="">
   <head>
-    <title>Some Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - gtml</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--<link rel="stylesheet" href="/static/styles.css">-->
   </head>
-  <body>
-    <button data-basicbutton="">Some Title</button>
+  <body class="bg-white text-gray-900 min-h-screen">
     <div>
-    <p>Some Content</p>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <span class="text-xl font-bold text-gray-800">gtml</span>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <a href="/" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-blue-600 border-b-2 border-blue-600">Home</a>
+              <a href="/docs" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">Documentation</a>
+              <a href="https://github.com/phillip-england/gtml" target="_blank" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative bg-white overflow-hidden">
+      <div class="max-w-7xl mx-auto">
+        <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
+          <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+            <div class="text-center">
+              <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                <span class="block">Build static sites with</span>
+                <span class="block text-blue-600">gtml</span>
+              </h1>
+              <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl">
+                An opinionated static site generator that compiles components and routes into static HTML assets. Create reusable HTML components and build your site with ease.
+              </p>
+              <div class="mt-5 sm:mt-8 flex justify-center">
+                <div class="rounded-md shadow">
+                  <a href="/docs" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
+                    Get Started
+                  </a>
+                </div>
+                <div class="ml-3">
+                  <a href="https://github.com/phillip-england/gtml" target="_blank" class="w-full flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hello World Example Section -->
+    <div class="bg-gray-50 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-extrabold text-gray-900">Hello World Example</h2>
+          <p class="mt-4 text-lg text-gray-600">Get started with a simple example</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Component Example -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-gray-800 px-4 py-2">
+              <span class="text-sm text-gray-400">components/Greeting.html</span>
+            </div>
+            <pre class="p-4 overflow-x-auto bg-gray-900"><code class="text-sm text-gray-100 font-mono">&lt;div props='name string'&gt;
+  &lt;h1 class="text-2xl font-bold"&gt;
+    Hello, &#123;name&#125;!
+  &lt;/h1&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <!-- Route Example -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-gray-800 px-4 py-2">
+              <span class="text-sm text-gray-400">routes/index.html</span>
+            </div>
+            <pre class="p-4 overflow-x-auto bg-gray-900"><code class="text-sm text-gray-100 font-mono">&lt;html&gt;
+  &lt;body&gt;
+    &lt;Greeting name="World" /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden inline-block">
+            <div class="bg-gray-800 px-4 py-2">
+              <span class="text-sm text-gray-400">Compiled Output: dist/index.html</span>
+            </div>
+            <pre class="p-4 overflow-x-auto bg-gray-900"><code class="text-sm text-gray-100 font-mono">&lt;html&gt;
+  &lt;body&gt;
+    &lt;div data-greeting=""&gt;
+      &lt;h1 class="text-2xl font-bold"&gt;
+        Hello, World!
+      &lt;/h1&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-extrabold text-gray-900">Why gtml?</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center p-6">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Simple & Fast</h3>
+            <p class="text-gray-600">No complex build systems. Just HTML components that compile to static files.</p>
+          </div>
+
+          <div class="text-center p-6">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Component-Based</h3>
+            <p class="text-gray-600">Create reusable components with props and slots for maximum flexibility.</p>
+          </div>
+
+          <div class="text-center p-6">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Zero Runtime</h3>
+            <p class="text-gray-600">Pure static HTML output. No JavaScript framework overhead in production.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-gray-400">
+          gtml - An opinionated static site generator
+        </p>
+        <p class="mt-2 text-gray-500">
+          <a href="https://github.com/phillip-england/gtml" target="_blank" class="hover:text-white">View on GitHub</a>
+        </p>
+      </div>
+    </footer>
   </div>
   </body>
- </html>
+</html>

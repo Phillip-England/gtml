@@ -1,0 +1,420 @@
+<DocsLayout title="Documentation">
+  <slot name='content' tag='div'>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="/" class="text-xl font-bold text-gray-800">gtml</a>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <a href="/" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">Home</a>
+              <a href="/docs" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-blue-600 border-b-2 border-blue-600">Documentation</a>
+              <a href="https://github.com/phillip-england/gtml" target="_blank" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex">
+      <!-- Sidebar -->
+      <aside class="hidden lg:block w-64 bg-gray-50 border-r border-gray-200 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
+        <nav class="p-4 space-y-8">
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Getting Started</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="#installation" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Installation</a></li>
+              <li><a href="#project-structure" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Project Structure</a></li>
+              <li><a href="#hello-world" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Hello World</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Components</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="#basic-components" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Basic Components</a></li>
+              <li><a href="#props" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Props</a></li>
+              <li><a href="#prop-types" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Prop Types</a></li>
+              <li><a href="#expressions" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Expressions</a></li>
+              <li><a href="#slots" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Slots</a></li>
+              <li><a href="#prop-drilling" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Prop Drilling</a></li>
+              <li><a href="#conditional-rendering" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Conditional Rendering</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">CLI</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="#cli-init" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">gtml init</a></li>
+              <li><a href="#cli-compile" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">gtml compile</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Extras</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="#preinstalled-components" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Preinstalled Components</a></li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-8 max-w-4xl">
+        <!-- Getting Started -->
+        <section id="installation" class="mb-16">
+          <h1 class="text-3xl font-bold text-gray-900 mb-4">Installation</h1>
+          <p class="text-gray-600 mb-4">Install gtml using Go:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">go install github.com/phillip-england/gtml@latest</code></pre>
+          </div>
+          <p class="text-gray-600 mt-4">Verify the installation:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mt-2">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">gtml --help</code></pre>
+          </div>
+        </section>
+
+        <section id="project-structure" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Project Structure</h2>
+          <p class="text-gray-600 mb-4">A gtml project requires the following directory structure:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">./myapp
+./myapp/components    # Your HTML components
+./myapp/routes        # Your page routes
+./myapp/dist          # Compiled output
+./myapp/static        # Static assets (CSS, JS, images)</code></pre>
+          </div>
+          <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+            <p class="text-blue-700"><strong>Note:</strong> These directories are required. Without them, gtml will fail to compile.</p>
+          </div>
+        </section>
+
+        <section id="hello-world" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Hello World</h2>
+          <p class="text-gray-600 mb-4">Let's create a simple Hello World example. First, create a component:</p>
+
+          <p class="text-sm text-gray-500 mb-2">components/Greeting.html</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='name string'&gt;
+  &lt;h1&gt;Hello, &#123;name&#125;!&lt;/h1&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-4">Then use it in a route:</p>
+          <p class="text-sm text-gray-500 mb-2">routes/index.html</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;html&gt;
+  &lt;body&gt;
+    &lt;Greeting name="World" /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-4">Run <code class="bg-gray-100 px-1 rounded">gtml compile ./myapp</code> to get:</p>
+          <p class="text-sm text-gray-500 mb-2">dist/index.html</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;html&gt;
+  &lt;body&gt;
+    &lt;div data-greeting=""&gt;
+      &lt;h1&gt;Hello, World!&lt;/h1&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+        </section>
+
+        <!-- Components -->
+        <section id="basic-components" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Basic Components</h2>
+          <p class="text-gray-600 mb-4">Components are reusable HTML snippets stored in the <code class="bg-gray-100 px-1 rounded">components</code> directory. Each component is a single HTML file.</p>
+
+          <p class="text-sm text-gray-500 mb-2">components/Card.html</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='heading string, subheading string'&gt;
+  &lt;h1&gt;&#123;heading&#125;&lt;/h1&gt;
+  &lt;p&gt;&#123;subheading&#125;&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-4">Components can include styles that get scoped to the component:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;style&gt;
+  h1 &#123; color: red; &#125;
+&lt;/style&gt;
+
+&lt;div props='heading string'&gt;
+  &lt;h1&gt;&#123;heading&#125;&lt;/h1&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section id="props" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Props</h2>
+          <p class="text-gray-600 mb-4">Props are declared using the <code class="bg-gray-100 px-1 rounded">props</code> attribute on the outermost element. Each prop has a name and type, separated by commas:</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='name string, age int, isAdmin boolean'&gt;
+  &lt;p&gt;Name: &#123;name&#125;&lt;/p&gt;
+  &lt;p&gt;Age: &#123;age&#125;&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-4">Props are rendered using curly braces: <code class="bg-gray-100 px-1 rounded">&#123;propName&#125;</code></p>
+        </section>
+
+        <section id="prop-types" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Prop Types</h2>
+          <p class="text-gray-600 mb-4">gtml supports three prop types:</p>
+
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">String</h3>
+              <p class="text-gray-600 mb-2">Strings can be passed as raw values or expressions:</p>
+              <div class="bg-gray-900 rounded-lg overflow-hidden">
+                <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;Greeting name="Bob" /&gt;
+&lt;Greeting name=&#123;"Bob"&#125; /&gt;
+&lt;Greeting name=&#123;"Bo" + "b"&#125; /&gt;</code></pre>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">Int</h3>
+              <p class="text-gray-600 mb-2">Integers must be passed as expressions:</p>
+              <div class="bg-gray-900 rounded-lg overflow-hidden">
+                <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;AgeDisplay age=&#123;25&#125; /&gt;
+&lt;AgeDisplay age=&#123;20 + 5&#125; /&gt;</code></pre>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">Boolean</h3>
+              <p class="text-gray-600 mb-2">Booleans must be passed as expressions:</p>
+              <div class="bg-gray-900 rounded-lg overflow-hidden">
+                <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;AdminPanel isAdmin=&#123;true&#125; /&gt;
+&lt;AdminPanel isAdmin=&#123;age &gt; 21&#125; /&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="expressions" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Expressions</h2>
+          <p class="text-gray-600 mb-4">Expressions are evaluated within <code class="bg-gray-100 px-1 rounded">&#123;&#125;</code> braces. They can be used in text content and attributes.</p>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">In Text Content</h3>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='name string, age int'&gt;
+  &lt;p&gt;My name is &#123;name&#125;&lt;/p&gt;
+  &lt;p&gt;My age is &#123;age&#125;&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">In Attributes</h3>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='extraYears int'&gt;
+  &lt;AgeComp age=&#123;extraYears + 2&#125; /&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Arithmetic Operations</h3>
+          <p class="text-gray-600 mb-2">Expressions support standard math operations (PEMDAS order):</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;Calculator result=&#123;10 + 5 * 2&#125; /&gt;  &lt;!-- 20 --&gt;
+&lt;Calculator result=&#123;(10 + 5) * 2&#125; /&gt; &lt;!-- 30 --&gt;</code></pre>
+          </div>
+        </section>
+
+        <section id="slots" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Slots</h2>
+          <p class="text-gray-600 mb-4">Slots allow you to insert content into specific places within a component.</p>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">Define a Slot</h3>
+          <p class="text-gray-600 mb-2">Use <code class="bg-gray-100 px-1 rounded">&#123;&#123; slot: name &#125;&#125;</code> to define where content goes:</p>
+          <p class="text-sm text-gray-500 mb-2">components/Layout.html</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;html props='title string'&gt;
+  &lt;head&gt;&lt;title&gt;&#123;title&#125;&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;nav&gt;My Site&lt;/nav&gt;
+    &#123;&#123; slot: content &#125;&#125;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Fill a Slot</h3>
+          <p class="text-gray-600 mb-2">Use <code class="bg-gray-100 px-1 rounded">&lt;slot name='...' tag='...'&gt;</code> to fill it:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;Layout title="My Page"&gt;
+  &lt;slot name='content' tag='main'&gt;
+    &lt;h1&gt;Welcome!&lt;/h1&gt;
+    &lt;p&gt;This is my page content.&lt;/p&gt;
+  &lt;/slot&gt;
+&lt;/Layout&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600">The <code class="bg-gray-100 px-1 rounded">tag</code> attribute specifies what HTML element wraps the slot content.</p>
+        </section>
+
+        <section id="prop-drilling" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Prop Drilling</h2>
+          <p class="text-gray-600 mb-4">Pass props down through nested components using expressions:</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;!-- components/Inner.html --&gt;
+&lt;div props='text string'&gt;
+  &lt;p&gt;&#123;text&#125;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- components/Outer.html --&gt;
+&lt;div props='title string'&gt;
+  &lt;Inner text=&#123;title&#125; /&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600">The parent's <code class="bg-gray-100 px-1 rounded">title</code> prop is passed to the child's <code class="bg-gray-100 px-1 rounded">text</code> prop using expression syntax.</p>
+        </section>
+
+        <section id="conditional-rendering" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Conditional Rendering</h2>
+          <p class="text-gray-600 mb-4">Use ternary operators for conditional rendering:</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='isAdmin boolean'&gt;
+  &#123; isAdmin ? (
+    &lt;p&gt;Welcome, Admin!&lt;/p&gt;
+  ) : (
+    &lt;p&gt;Welcome, User!&lt;/p&gt;
+  ) &#125;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">Comparison Operators</h3>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='age int'&gt;
+  &#123; age &gt;= 21 ? (
+    &lt;p&gt;You can drink&lt;/p&gt;
+  ) : (
+    &lt;p&gt;You cannot drink&lt;/p&gt;
+  ) &#125;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-2">Available operators:</p>
+          <ul class="list-disc list-inside text-gray-600 mb-4">
+            <li><code class="bg-gray-100 px-1 rounded">==</code> equals</li>
+            <li><code class="bg-gray-100 px-1 rounded">!=</code> not equals</li>
+            <li><code class="bg-gray-100 px-1 rounded">&lt;</code> less than</li>
+            <li><code class="bg-gray-100 px-1 rounded">&gt;</code> greater than</li>
+            <li><code class="bg-gray-100 px-1 rounded">&lt;=</code> less than or equal</li>
+            <li><code class="bg-gray-100 px-1 rounded">&gt;=</code> greater than or equal</li>
+          </ul>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Logical Operators</h3>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='age int'&gt;
+  &#123; age &gt; 21 &amp;&amp; age &lt; 25 ? (
+    &lt;p&gt;Young adult&lt;/p&gt;
+  ) : (
+    &lt;p&gt;Other age group&lt;/p&gt;
+  ) &#125;
+&lt;/div&gt;</code></pre>
+          </div>
+          <ul class="list-disc list-inside text-gray-600 mt-2">
+            <li><code class="bg-gray-100 px-1 rounded">&amp;&amp;</code> - both conditions must be true</li>
+            <li><code class="bg-gray-100 px-1 rounded">||</code> - at least one condition must be true</li>
+          </ul>
+        </section>
+
+        <!-- CLI -->
+        <section id="cli-init" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">gtml init</h2>
+          <p class="text-gray-600 mb-4">Initialize a new gtml project:</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">gtml init myapp</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-4">This creates the required directory structure with starter components:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">./myapp
+./myapp/components/BasicButton.html
+./myapp/components/GuestLayout.html
+./myapp/routes/index.html
+./myapp/dist/
+./myapp/static/</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-2">Force overwrite an existing directory:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">gtml init myapp --force</code></pre>
+          </div>
+        </section>
+
+        <section id="cli-compile" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">gtml compile</h2>
+          <p class="text-gray-600 mb-4">Compile your gtml project to static HTML:</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">gtml compile ./myapp</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-4">This compiles all routes in <code class="bg-gray-100 px-1 rounded">./myapp/routes</code> and outputs to <code class="bg-gray-100 px-1 rounded">./myapp/dist</code>.</p>
+
+          <p class="text-gray-600 mb-2">Watch mode for development:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">gtml compile ./myapp --watch</code></pre>
+          </div>
+          <p class="text-gray-600 mt-2">This automatically recompiles when any file in the project changes.</p>
+        </section>
+
+        <!-- Preinstalled Components -->
+        <section id="preinstalled-components" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Preinstalled Components</h2>
+          <p class="text-gray-600 mb-4">gtml comes with a library of preinstalled Tailwind-styled components. When you run <code class="bg-gray-100 px-1 rounded">gtml init</code>, you get access to these ready-to-use components:</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Buttons</h3>
+              <p class="text-sm text-gray-600">ButtonPrimary, ButtonSecondary, ButtonOutline, ButtonDanger, ButtonSuccess, ButtonSm, ButtonLg</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Forms</h3>
+              <p class="text-sm text-gray-600">InputText, InputEmail, InputPassword, Textarea, Select, Checkbox, RadioGroup, FormLayout</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Cards</h3>
+              <p class="text-sm text-gray-600">CardBasic, CardWithImage, CardClickable, ProfileCard, PricingCard</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Alerts</h3>
+              <p class="text-sm text-gray-600">AlertSuccess, AlertError, AlertWarning, AlertInfo, Notification</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Navigation</h3>
+              <p class="text-sm text-gray-600">Navbar, NavLink, Breadcrumb, Pagination, Tabs, TabItem</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Layout</h3>
+              <p class="text-sm text-gray-600">HeroSection, Footer, Sidebar, Modal, Grid2Columns, Grid3Columns, Section</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Data Display</h3>
+              <p class="text-sm text-gray-600">Avatar, ProgressBar, Accordion, ListGroup, StatisticCard, FeatureCard</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h3 class="font-semibold text-gray-900 mb-2">Utility</h3>
+              <p class="text-sm text-gray-600">Divider, LoadingSpinner, LoadingSkeleton, StepIndicator, CodeBlock</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-gray-200 pt-8 mt-16">
+          <div class="text-center text-gray-500">
+            <p>gtml - An opinionated static site generator</p>
+            <p class="mt-2">
+              <a href="https://github.com/phillip-england/gtml" target="_blank" class="text-blue-600 hover:text-blue-800">View on GitHub</a>
+            </p>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </slot>
+</DocsLayout>
