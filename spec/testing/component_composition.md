@@ -9,7 +9,7 @@ Validate that components can be nested within other components correctly.
 ```html
 <div class='card' props='title string'>
   <h2>{title}</h2>
-  {{ slot: body }}
+  <slot name='body' />
 </div>
 ```
 

@@ -16,7 +16,7 @@ Look at this component:
       <a href='/'>Home</a>
       </ul>
     </nav>
-    {{ slot: post }}
+    <slot name='post' />
   </body>
 </html>
 ```

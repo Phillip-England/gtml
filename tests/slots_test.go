@@ -8,7 +8,7 @@ import (
 
 func TestSlot_BasicSlot(t *testing.T) {
 	state := createTestState(map[string]string{
-		"PageLayout": `<html><body><header>Site Header</header>{{ slot: content }}<footer>Site Footer</footer></body></html>`,
+		"PageLayout": `<html><body><header>Site Header</header><slot name='content' /><footer>Site Footer</footer></body></html>`,
 	})
 
 	input := `<PageLayout><slot name='content' tag='main'><p>Hello World</p></slot></PageLayout>`
@@ -26,7 +26,7 @@ func TestSlot_BasicSlot(t *testing.T) {
 
 func TestSlot_MultipleSlots(t *testing.T) {
 	state := createTestState(map[string]string{
-		"TwoColumnLayout": `<div class='container'>{{ slot: sidebar }}{{ slot: main }}</div>`,
+		"TwoColumnLayout": `<div class='container'><slot name='sidebar' /><slot name='main' /></div>`,
 	})
 
 	input := `<TwoColumnLayout><slot name='sidebar' tag='aside'><nav>Navigation</nav></slot><slot name='main' tag='section'><p>Main content here</p></slot></TwoColumnLayout>`
@@ -44,7 +44,7 @@ func TestSlot_MultipleSlots(t *testing.T) {
 
 func TestSlot_WithClass(t *testing.T) {
 	state := createTestState(map[string]string{
-		"Layout": `<div>{{ slot: content }}</div>`,
+		"Layout": `<div><slot name='content' /></div>`,
 	})
 
 	input := `<Layout><slot name='content' tag='div' class='my-class'><p>Content</p></slot></Layout>`
@@ -62,7 +62,7 @@ func TestSlot_WithClass(t *testing.T) {
 
 func TestSlot_EmptySlot(t *testing.T) {
 	state := createTestState(map[string]string{
-		"Layout": `<div>{{ slot: content }}</div>`,
+		"Layout": `<div><slot name='content' /></div>`,
 	})
 
 	input := `<Layout></Layout>`
@@ -81,7 +81,7 @@ func TestSlot_EmptySlot(t *testing.T) {
 func TestSlot_NestedComponentInSlot(t *testing.T) {
 	state := createTestState(map[string]string{
 		"Button": `<button props='label string'>{label}</button>`,
-		"Card":   `<div class="card">{{ slot: actions }}</div>`,
+		"Card":   `<div class="card"><slot name='actions' /></div>`,
 	})
 
 	input := `<Card><slot name='actions' tag='div'><Button label='Click Me' /></slot></Card>`
@@ -99,7 +99,7 @@ func TestSlot_NestedComponentInSlot(t *testing.T) {
 
 func TestSlot_OrderIndependence(t *testing.T) {
 	state := createTestState(map[string]string{
-		"Layout": `<div>{{ slot: header }}{{ slot: footer }}</div>`,
+		"Layout": `<div><slot name='header' /><slot name='footer' /></div>`,
 	})
 
 	input := `<Layout><slot name='footer' tag='footer'>Footer Content</slot><slot name='header' tag='header'>Header Content</slot></Layout>`

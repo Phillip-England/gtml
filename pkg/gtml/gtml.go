@@ -26,7 +26,6 @@ var (
 	reExpression      = regexp.MustCompile(`\{([^{}]+)\}`)
 	reSlotPlaceholder = regexp.MustCompile(`(?s)<slot\s+name=['"](\w+)['"]\s*/?>`)
 	reSlotUsage       = regexp.MustCompile(`(?s)<slot\s+([^>]+)>(.*?)</slot>`)
-	reSlotDef         = regexp.MustCompile(`\{\{\s*slot:\s*(\w+)\s*\}\}`)
 )
 
 type PropDef struct {
@@ -103,15 +102,6 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 		slotsMap := extractSlots(compiledChildren)
 
 		renderedComp := compDef.Template
-
-		renderedComp = reSlotDef.ReplaceAllStringFunc(renderedComp, func(match string) string {
-			subMatch := reSlotDef.FindStringSubmatch(match)
-			if len(subMatch) < 2 {
-				return match
-			}
-			slotName := subMatch[1]
-			return "<slot name='" + slotName + "' />"
-		})
 
 		renderedComp, err = EvaluateExpressions(renderedComp, props)
 		if err != nil {

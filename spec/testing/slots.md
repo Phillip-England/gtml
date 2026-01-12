@@ -11,7 +11,7 @@ Take this layout component:
 <html>
   <body>
     <header>Site Header</header>
-    {{ slot: content }}
+    <slot name='content' />
     <footer>Site Footer</footer>
   </body>
 </html>
@@ -45,8 +45,8 @@ Take this layout:
 `./myapp/components/TwoColumnLayout.html`
 ```html
 <div class='container'>
-  {{ slot: sidebar }}
-  {{ slot: main }}
+  <slot name='sidebar' />
+  <slot name='main' />
 </div>
 ```
 
@@ -127,7 +127,7 @@ If a slot references a name that doesn't exist in the parent component:
 Parent component:
 ```html
 <div>
-  {{ slot: sidebar }}
+  <slot name='sidebar' />
 </div>
 ```
 

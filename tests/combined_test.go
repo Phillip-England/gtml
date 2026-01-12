@@ -9,7 +9,7 @@ import (
 func TestCombined_SlotWithDrilledProp(t *testing.T) {
 	state := createTestState(map[string]string{
 		"Button":    `<button props='text string'>{text}</button>`,
-		"Container": `<div props='title string'>{title}{{ slot: content }}</div>`,
+		"Container": `<div props='title string'>{title}<slot name='content' /></div>`,
 	})
 
 	input := `<Container title='My Page'><slot name='content' tag='main'><Button text='Click' /></slot></Container>`
@@ -28,7 +28,7 @@ func TestCombined_SlotWithDrilledProp(t *testing.T) {
 func TestCombined_FullLayoutExample(t *testing.T) {
 	state := createTestState(map[string]string{
 		"BasicButton": `<button props='text string'>{text}</button>`,
-		"GuestLayout": `<html props='title string'><head><title>{title}</title></head><body><BasicButton text={title} />{{ slot: content }}</body></html>`,
+		"GuestLayout": `<html props='title string'><head><title>{title}</title></head><body><BasicButton text={title} /><slot name='content' /></body></html>`,
 	})
 
 	input := `<GuestLayout title="Some Title"><slot name='content' tag='div'><p>Some Content</p><BasicButton text='Click Me' /></slot></GuestLayout>`

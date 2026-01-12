@@ -212,14 +212,14 @@
           <p class="text-gray-600 mb-4">Slots allow you to insert content into specific places within a component.</p>
 
           <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">Define a Slot</h3>
-          <p class="text-gray-600 mb-2">Use <code class="bg-gray-100 px-1 rounded">&#123;&#123; slot: name &#125;&#125;</code> to define where content goes:</p>
+          <p class="text-gray-600 mb-2">Use <code class="bg-gray-100 px-1 rounded">&lt;slot name='...' /&gt;</code> to define where content goes:</p>
           <p class="text-sm text-gray-500 mb-2">components/Layout.html</p>
           <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;html props='title string'&gt;
   &lt;head&gt;&lt;title&gt;&#123;title&#125;&lt;/title&gt;&lt;/head&gt;
   &lt;body&gt;
     &lt;nav&gt;My Site&lt;/nav&gt;
-    &#123;&#123; slot: content &#125;&#125;
+    &lt;slot name='content' /&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
           </div>

@@ -110,7 +110,7 @@ Insert content into specific places within components:
 <html props='title string'>
   <head><title>{title}</title></head>
   <body>
-    {{ slot: content }}
+    <slot name='content' />
   </body>
 </html>
 ```
