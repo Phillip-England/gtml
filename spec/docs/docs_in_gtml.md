@@ -1,22 +1,39 @@
-# Our Documentation is Made with GTML
+# Documentation Site Overview
 
-## We Should Test GTML By Making A Documentation Website
-What better way to ensure that GTML is functions as expected than by creating the documentation site with it?
+## Built with gtml
+The gtml documentation website is built entirely using gtml itself. This serves as both a real-world test of the framework and a demonstration of its capabilities.
 
-## Located in  ./www
-The gtml project where the doucmentation exists will be located at `./www` at this projects root (not reliative to this dir). This file will be a standard gtml project as outlined by this spec.
+## Location
+The documentation site source is located at `./docs` in the project root. This is a standard gtml project with the following structure:
 
+```
+./docs
+./docs/components    # Reusable components for the docs site
+./docs/routes        # Page routes
+./docs/dist          # Compiled output
+./docs/static        # Static assets
+```
 
-## Build With Preinstalled Components
-The documentation website ought to be built with preinstalled gtml components such that they showcase how the components look and feel when in use. If you find yourself building out the documentation website, and you need to create more components to get the job done, please create them in the spec, add them to the actual code for the project, and dont forget to test them please. Also, let me know if you are doing this. The project may grow overtime, and we may add to the documentation. If you need new components for the documentation site, just tell me and then write a spec for them, write the go code to place them in preinstalled components upon init, and then write tests for them.
+## Built with Preinstalled Components
+The documentation website uses the preinstalled gtml components to showcase how they look and function. The site itself demonstrates practical usage of these components.
 
 ## Links Within the Site
-Inside a gtml site, the links do not need to point to a `html` like this:
+Links in the documentation site use clean URLs without the `.html` extension:
+
 ```html
-<a href='/docs.html'></a>
+<!-- Correct -->
+<a href="/docs">Documentation</a>
+<a href="/components/buttons/button-primary">ButtonPrimary</a>
+
+<!-- Not needed -->
+<a href="/docs.html">Documentation</a>
 ```
 
-We are free to do:
-```html
-<a href='/docs'></a>
+## Compiling the Documentation Site
+To compile the documentation site, run:
+
+```bash
+gtml compile ./docs
 ```
+
+This outputs the compiled static HTML files to `./docs/dist`.

@@ -1,0 +1,83 @@
+<DocsLayout title="Avatar">
+  <slot name='content' tag='div'>
+    <DocsNavbar currentPage="components" />
+
+    <div class="flex">
+      <DocsSidebar currentPage="avatar" />
+
+      <main class="flex-1 p-8 max-w-4xl">
+        <div class="mb-8">
+          <a href="/docs" class="text-blue-600 hover:text-blue-800 flex items-center mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+          </a>
+          <h1 class="text-3xl font-bold text-gray-900">Avatar</h1>
+          <p class="text-gray-600 mt-2">User avatar image or initials</p>
+        </div>
+
+<section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">gtml Code</h2>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;Avatar name="John Doe" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" size="md" /&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example</h2>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div class="flex items-center gap-4">
+              <Avatar name="John Doe" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" size="md" />
+              <Avatar name="Jane Smith" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jane" size="lg" />
+              <Avatar name="Bob Wilson" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" size="sm" />
+            </div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Examples</h2>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div class="flex items-center gap-4">
+              <Avatar name="John Doe" src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" size="md" />
+              <Avatar name="Jane Smith" src="" size="lg" />
+              <Avatar name="Bob Wilson" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" size="sm" />
+            </div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Props</h2>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Prop</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">name</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">User name for initials fallback</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">src</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Image URL (empty for initials fallback)</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">size</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Size: sm, md, or lg</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </slot>
+</DocsLayout>

@@ -1,0 +1,148 @@
+<html data-docslayout="">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertWarning - gtml</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--<link rel="stylesheet" href="/static/styles.css">-->
+  </head>
+  <body class="bg-white text-gray-900 min-h-screen">
+    <div>
+    <nav data-docsnavbar="" class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <a href="/" class="text-xl font-bold text-gray-800">gtml</a>
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <a href="/" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Home</a>
+          <a href="/docs" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Documentation</a>
+          <a href="/docs/components" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Components</a>
+          <a href="https://github.com/phillip-england/gtml" target="_blank" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    <div class="flex">
+      <div data-docssidebar="">
+  <aside class="hidden lg:block w-64 bg-gray-50 border-r border-gray-200 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
+    <nav class="p-4 space-y-8">
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Alerts</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/alerts/alert-success" class="block px-2 py-1 text-sm false">AlertSuccess</a></li>
+          <li><a href="/components/alerts/alert-error" class="block px-2 py-1 text-sm false">AlertError</a></li>
+          <li><a href="/components/alerts/alert-warning" class="block px-2 py-1 text-sm false">AlertWarning</a></li>
+          <li><a href="/components/alerts/alert-info" class="block px-2 py-1 text-sm false">AlertInfo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Badges</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/badges/badge-primary" class="block px-2 py-1 text-sm false">BadgePrimary</a></li>
+          <li><a href="/components/badges/badge-success" class="block px-2 py-1 text-sm false">BadgeSuccess</a></li>
+          <li><a href="/components/badges/badge-warning" class="block px-2 py-1 text-sm false">BadgeWarning</a></li>
+          <li><a href="/components/badges/badge-danger" class="block px-2 py-1 text-sm false">BadgeDanger</a></li>
+          <li><a href="/components/badges/skill-badge" class="block px-2 py-1 text-sm false">SkillBadge</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Buttons</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/buttons/button-primary" class="block px-2 py-1 text-sm false">ButtonPrimary</a></li>
+          <li><a href="/components/buttons/button-secondary" class="block px-2 py-1 text-sm false">ButtonSecondary</a></li>
+          <li><a href="/components/buttons/button-outline" class="block px-2 py-1 text-sm false">ButtonOutline</a></li>
+          <li><a href="/components/buttons/button-danger" class="block px-2 py-1 text-sm false">ButtonDanger</a></li>
+          <li><a href="/components/buttons/button-success" class="block px-2 py-1 text-sm false">ButtonSuccess</a></li>
+          <li><a href="/components/buttons/button-sm" class="block px-2 py-1 text-sm false">ButtonSm</a></li>
+          <li><a href="/components/buttons/button-lg" class="block px-2 py-1 text-sm false">ButtonLg</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Cards</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/cards/card-basic" class="block px-2 py-1 text-sm false">CardBasic</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Display</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/display/avatar" class="block px-2 py-1 text-sm false">Avatar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Feedback</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/feedback/notification" class="block px-2 py-1 text-sm false">Notification</a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+</div>
+
+      <main class="flex-1 p-8 max-w-4xl">
+        <div class="mb-8">
+          <a href="/docs" class="text-blue-600 hover:text-blue-800 flex items-center mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+          </a>
+          <h1 class="text-3xl font-bold text-gray-900">AlertWarning</h1>
+          <p class="text-gray-600 mt-2">Yellow warning alert with message</p>
+        </div>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">gtml Code</h2>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;AlertWarning message="Please review before proceeding" /&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example</h2>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div data-alertwarning="">
+  <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+    <div class="flex items-center">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-yellow-700">Please review before proceeding</p>
+      </div>
+    </div>
+  </div>
+</div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Props</h2>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Prop</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">message</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">The warning message to display</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  </body>
+</html>

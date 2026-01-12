@@ -1,0 +1,297 @@
+<html data-docslayout="">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification - gtml</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--<link rel="stylesheet" href="/static/styles.css">-->
+  </head>
+  <body class="bg-white text-gray-900 min-h-screen">
+    <div>
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="/" class="text-xl font-bold text-gray-800">gtml</a>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <a href="/" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">Home</a>
+              <a href="/docs" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-blue-600 border-b-2 border-blue-600">Documentation</a>
+              <a href="https://github.com/phillip-england/gtml" target="_blank" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex">
+      <aside class="hidden lg:block w-64 bg-gray-50 border-r border-gray-200 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
+        <nav class="p-4 space-y-8">
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Alerts</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/alert-success" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">AlertSuccess</a></li>
+              <li><a href="/docs/components/alert-error" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">AlertError</a></li>
+              <li><a href="/docs/components/alert-warning" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">AlertWarning</a></li>
+              <li><a href="/docs/components/alert-info" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">AlertInfo</a></li>
+              <li><a href="/docs/components/notification" class="block px-2 py-1 text-sm text-blue-700 bg-blue-100 rounded">Notification</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Badges</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/badge-primary" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">BadgePrimary</a></li>
+              <li><a href="/docs/components/badge-success" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">BadgeSuccess</a></li>
+              <li><a href="/docs/components/badge-warning" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">BadgeWarning</a></li>
+              <li><a href="/docs/components/badge-danger" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">BadgeDanger</a></li>
+              <li><a href="/docs/components/skill-badge" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">SkillBadge</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Buttons</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/button-primary" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ButtonPrimary</a></li>
+              <li><a href="/docs/components/button-secondary" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ButtonSecondary</a></li>
+              <li><a href="/docs/components/button-outline" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ButtonOutline</a></li>
+              <li><a href="/docs/components/button-danger" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ButtonDanger</a></li>
+              <li><a href="/docs/components/button-success" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ButtonSuccess</a></li>
+              <li><a href="/docs/components/button-sm" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ButtonSm</a></li>
+              <li><a href="/docs/components/button-lg" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ButtonLg</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Cards</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/card-basic" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">CardBasic</a></li>
+              <li><a href="/docs/components/card-with-image" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">CardWithImage</a></li>
+              <li><a href="/docs/components/card-clickable" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">CardClickable</a></li>
+              <li><a href="/docs/components/profile-card" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ProfileCard</a></li>
+              <li><a href="/docs/components/pricing-card" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">PricingCard</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Content</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/social-links" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">SocialLinks</a></li>
+              <li><a href="/docs/components/tag" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Tag</a></li>
+              <li><a href="/docs/components/tag-list" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">TagList</a></li>
+              <li><a href="/docs/components/code-block" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">CodeBlock</a></li>
+              <li><a href="/docs/components/call-to-action" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">CallToAction</a></li>
+              <li><a href="/docs/components/empty-state" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">EmptyState</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Data Display</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/avatar" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Avatar</a></li>
+              <li><a href="/docs/components/progress-bar" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ProgressBar</a></li>
+              <li><a href="/docs/components/accordion" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Accordion</a></li>
+              <li><a href="/docs/components/list-group" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ListGroup</a></li>
+              <li><a href="/docs/components/statistic-card" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">StatisticCard</a></li>
+              <li><a href="/docs/components/feature-card" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">FeatureCard</a></li>
+              <li><a href="/docs/components/testimonial-card" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">TestimonialCard</a></li>
+              <li><a href="/docs/components/team-member-card" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">TeamMemberCard</a></li>
+              <li><a href="/docs/components/article-card" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ArticleCard</a></li>
+              <li><a href="/docs/components/comment" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Comment</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Form Elements</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/dropdown" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Dropdown</a></li>
+              <li><a href="/docs/components/dropdown-item" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">DropdownItem</a></li>
+              <li><a href="/docs/components/toggle-switch" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">ToggleSwitch</a></li>
+              <li><a href="/docs/components/tooltip" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Tooltip</a></li>
+              <li><a href="/docs/components/search-input" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">SearchInput</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Forms</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/input-text" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">InputText</a></li>
+              <li><a href="/docs/components/input-email" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">InputEmail</a></li>
+              <li><a href="/docs/components/input-password" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">InputPassword</a></li>
+              <li><a href="/docs/components/textarea" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Textarea</a></li>
+              <li><a href="/docs/components/select" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Select</a></li>
+              <li><a href="/docs/components/checkbox" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Checkbox</a></li>
+              <li><a href="/docs/components/radio-group" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">RadioGroup</a></li>
+              <li><a href="/docs/components/form-layout" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">FormLayout</a></li>
+              <li><a href="/docs/components/form-field" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">FormField</a></li>
+              <li><a href="/docs/components/login-form" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">LoginForm</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Layout</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/hero-section" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">HeroSection</a></li>
+              <li><a href="/docs/components/footer" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Footer</a></li>
+              <li><a href="/docs/components/sidebar" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Sidebar</a></li>
+              <li><a href="/docs/components/modal" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Modal</a></li>
+              <li><a href="/docs/components/section" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Section</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Navigation</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/navbar" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Navbar</a></li>
+              <li><a href="/docs/components/breadcrumb" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Breadcrumb</a></li>
+              <li><a href="/docs/components/pagination" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Pagination</a></li>
+              <li><a href="/docs/components/tabs" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Tabs</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tables</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/table-basic" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">TableBasic</a></li>
+              <li><a href="/docs/components/table-cell" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">TableCell</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Utility</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/divider" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Divider</a></li>
+              <li><a href="/docs/components/loading-spinner" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">LoadingSpinner</a></li>
+              <li><a href="/docs/components/loading-skeleton" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">LoadingSkeleton</a></li>
+              <li><a href="/docs/components/step-indicator" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">StepIndicator</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pricing</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="/docs/components/pricing-feature" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">PricingFeature</a></li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="flex-1 p-8 max-w-4xl">
+        <div class="mb-8">
+          <a href="/docs" class="text-blue-600 hover:text-blue-800 flex items-center mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+          </a>
+          <h1 class="text-3xl font-bold text-gray-900">Notification</h1>
+          <p class="text-gray-600 mt-2">Multi-type notification with title and message</p>
+        </div>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">gtml Code</h2>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;Notification type="success" title="Success" message="Operation completed successfully!" /&gt;
+&lt;Notification type="error" title="Error" message="Something went wrong" /&gt;
+&lt;Notification type="warning" title="Warning" message="Please review" /&gt;
+&lt;Notification type="info" title="Info" message="Here is some information" /&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Examples</h2>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50 space-y-4">
+            <div data-notification="">
+  <div class="rounded-lg p-4 mb-4 shadow-md bg-blue-50 border border-blue-200 type-success">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-blue-800">Success</h3>
+        <div class="mt-2 text-sm text-blue-700">
+          <p>Operation completed successfully!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+            <div data-notification="">
+  <div class="rounded-lg p-4 mb-4 shadow-md bg-blue-50 border border-blue-200 type-error">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-blue-800">Error</h3>
+        <div class="mt-2 text-sm text-blue-700">
+          <p>Something went wrong</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+            <div data-notification="">
+  <div class="rounded-lg p-4 mb-4 shadow-md bg-blue-50 border border-blue-200 type-warning">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-blue-800">Warning</h3>
+        <div class="mt-2 text-sm text-blue-700">
+          <p>Please review</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+            <div data-notification="">
+  <div class="rounded-lg p-4 mb-4 shadow-md bg-blue-50 border border-blue-200 type-info">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-blue-800">Info</h3>
+        <div class="mt-2 text-sm text-blue-700">
+          <p>Here is some information</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Props</h2>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Prop</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">type</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Notification type: success, error, warning, or info</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">title</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">The notification title</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">message</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">The notification message</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  </body>
+</html>
