@@ -6,24 +6,24 @@ Validate that all preinstalled components included with gtml compile correctly a
 ## Test Location
 All preinstalled component tests should be located in:
 ```
-./spec/tests/preinstalled_components/
+./tests/preinstalled_components/
 ```
 
 Tests for each component category should be in separate files:
 ```
-./spec/tests/preinstalled_components/buttons_test.md
-./spec/tests/preinstalled_components/forms_test.md
-./spec/tests/preinstalled_components/cards_test.md
-./spec/tests/preinstalled_components/alerts_test.md
-./spec/tests/preinstalled_components/badges_test.md
-./spec/tests/preinstalled_components/navigation_test.md
-./spec/tests/preinstalled_components/tables_test.md
-./spec/tests/preinstalled_components/layout_test.md
-./spec/tests/preinstalled_components/data_display_test.md
-./spec/tests/preinstalled_components/content_test.md
-./spec/tests/preinstalled_components/form_elements_test.md
-./spec/tests/preinstalled_components/utility_test.md
-./spec/tests/preinstalled_components/pricing_test.md
+./tests/preinstalled_components/buttons_test.md
+./tests/preinstalled_components/forms_test.md
+./tests/preinstalled_components/cards_test.md
+./tests/preinstalled_components/alerts_test.md
+./tests/preinstalled_components/badges_test.md
+./tests/preinstalled_components/navigation_test.md
+./tests/preinstalled_components/tables_test.md
+./tests/preinstalled_components/layout_test.md
+./tests/preinstalled_components/data_display_test.md
+./tests/preinstalled_components/content_test.md
+./tests/preinstalled_components/form_elements_test.md
+./tests/preinstalled_components/utility_test.md
+./tests/preinstalled_components/pricing_test.md
 ```
 
 ## Test Requirements
@@ -196,7 +196,7 @@ Test components that use slots render child content correctly:
 ## Automated Test Execution
 Tests for preinstalled components should be executable via the CLI:
 ```
-gtml test ./spec/tests/preinstalled_components/
+gtml test ./tests/preinstalled_components/
 ```
 
 ## Test Coverage Requirements
