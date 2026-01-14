@@ -26,6 +26,13 @@ var (
 	reExpression      = regexp.MustCompile(`\{([^{}]+)\}`)
 	reSlotPlaceholder = regexp.MustCompile(`(?s)<slot\s+name=['"](\w+)['"]\s*/?>`)
 	reSlotUsage       = regexp.MustCompile(`(?s)<slot\s+([^>]+)>(.*?)</slot>`)
+
+	// Fetch-related regex patterns
+	reFetchAttr    = regexp.MustCompile(`\s+fetch\s*=\s*['"]([^'"]+)['"]`)
+	reAsAttr       = regexp.MustCompile(`\s+as\s*=\s*['"]([^'"]+)['"]`)
+	reForAttr      = regexp.MustCompile(`\s+for\s*=\s*['"]([^'"]+)['"]`)
+	reSuspenseAttr = regexp.MustCompile(`\s+suspense(\s|>|/)`)
+	reFallbackAttr = regexp.MustCompile(`\s+fallback(\s|>|/)`)
 )
 
 type PropDef struct {
@@ -54,6 +61,27 @@ type Value struct {
 	StrVal  string
 	IntVal  int
 	BoolVal bool
+}
+
+// FetchElement represents an element with client-side fetch behavior
+type FetchElement struct {
+	ID           string // Unique ID for JavaScript targeting
+	Method       string // HTTP method (GET, POST, etc.)
+	URL          string // URL to fetch from
+	AsName       string // Name for the data (from 'as' attribute)
+	StartIdx     int    // Start position in HTML
+	EndIdx       int    // End position in HTML
+	TagName      string // The HTML tag name
+	InnerContent string // Content inside the element
+	FullElement  string // The complete element HTML
+}
+
+// ForLoop represents a for iteration expression
+type ForLoop struct {
+	ItemName   string // Name of each item (e.g., 'user')
+	SourceName string // Name of the source data (e.g., 'users')
+	SourcePath string // Full path for nested access (e.g., 'user.colors')
+	TemplateID string // Unique ID for the template element
 }
 
 func (v Value) String() string {
@@ -103,10 +131,16 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 
 		renderedComp := compDef.Template
 
+		// Protect fetch expressions before evaluation
+		renderedComp = protectFetchExpressions(renderedComp)
+
 		renderedComp, err = EvaluateExpressions(renderedComp, props)
 		if err != nil {
 			return "", fmt.Errorf("error evaluating expressions in %s: %v", tagName, err)
 		}
+
+		// Restore fetch expressions after evaluation
+		renderedComp = restoreFetchExpressions(renderedComp)
 
 		renderedComp = reSlotPlaceholder.ReplaceAllStringFunc(renderedComp, func(match string) string {
 			subMatch := reSlotPlaceholder.FindStringSubmatch(match)
@@ -126,6 +160,13 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 		}
 
 		html = html[:startIdx] + finalRendered + html[endIdx:]
+	}
+
+	// Process client-side fetch elements BEFORE evaluating remaining expressions
+	// This preserves expressions like {user.name} for client-side JavaScript
+	html, err = ProcessFetchElements(html)
+	if err != nil {
+		return "", err
 	}
 
 	html, err = EvaluateExpressions(html, scopeProps)
@@ -183,6 +224,12 @@ func EvaluateExpressions(html string, props map[string]Value) (string, error) {
 			continue
 		}
 
+		// Skip expressions inside script tags (they're meant for client-side JavaScript)
+		if isInsideScriptTag(result, fullStart) {
+			offset = fullEnd
+			continue
+		}
+
 		if strings.Contains(expr, "?") && strings.Contains(expr, "(") {
 			offset = fullEnd
 			continue
@@ -197,6 +244,19 @@ func EvaluateExpressions(html string, props map[string]Value) (string, error) {
 		offset = fullStart + len(value.String())
 	}
 	return result, nil
+}
+
+// isInsideScriptTag checks if the given position is inside a script tag
+func isInsideScriptTag(html string, pos int) bool {
+	// Look backwards for opening script tag
+	lastScriptOpen := strings.LastIndex(html[:pos], "<script")
+	if lastScriptOpen == -1 {
+		return false
+	}
+
+	// Check if there's a closing script tag between the opening and position
+	lastScriptClose := strings.LastIndex(html[:pos], "</script>")
+	return lastScriptClose < lastScriptOpen
 }
 
 func isInsideComponentTag(html string, pos int) bool {
@@ -259,6 +319,10 @@ func evaluateTernaries(html string, props map[string]Value) (string, error) {
 func findTernaryStart(s string) int {
 	for i := 0; i < len(s); i++ {
 		if s[i] == '{' {
+			// Skip if inside a script tag (ternary expressions in scripts are for client-side JS)
+			if isInsideScriptTag(s, i) {
+				continue
+			}
 			depth := 1
 			hasQuestion := false
 			hasParen := false
@@ -975,6 +1039,622 @@ func IsKebabCase(s string) bool {
 		}
 	}
 	return true
+}
+
+// fetchCounter is used to generate unique IDs for fetch elements
+var fetchCounter int
+
+// Marker used to protect fetch expressions from compile-time evaluation
+const fetchExprMarker = "@@GTML_FETCH_EXPR@@"
+
+// protectFetchExpressions escapes expressions inside fetch elements so they aren't evaluated at compile time
+func protectFetchExpressions(html string) string {
+	result := html
+	offset := 0
+
+	for {
+		// Find next fetch element
+		loc := reFetchAttr.FindStringIndex(result[offset:])
+		if loc == nil {
+			break
+		}
+
+		// Find the start of this element
+		fetchAttrPos := offset + loc[0]
+		elementStart := -1
+		for i := fetchAttrPos; i >= 0; i-- {
+			if result[i] == '<' && i+1 < len(result) && result[i+1] != '/' {
+				elementStart = i
+				break
+			}
+		}
+		if elementStart == -1 {
+			offset = fetchAttrPos + 1
+			continue
+		}
+
+		// Find the element boundaries
+		startIdx, endIdx, _, _, _, innerContent := findElementAt(result, elementStart)
+		if startIdx == -1 {
+			offset = fetchAttrPos + 1
+			continue
+		}
+
+		// Protect expressions in inner content
+		protectedInner := protectExpressionsInContent(innerContent)
+
+		// Find where the inner content starts and ends
+		openTagEnd := strings.Index(result[startIdx:], ">") + startIdx + 1
+
+		// Find the tag name for the closing tag
+		tagName := ""
+		for i := startIdx + 1; i < len(result); i++ {
+			if result[i] == ' ' || result[i] == '>' || result[i] == '/' {
+				tagName = result[startIdx+1 : i]
+				break
+			}
+		}
+		closeTag := "</" + tagName + ">"
+		closeTagStart := endIdx - len(closeTag)
+
+		innerStart := openTagEnd
+		innerEnd := closeTagStart
+
+		if innerStart < innerEnd && innerStart > 0 && innerEnd <= len(result) {
+			result = result[:innerStart] + protectedInner + result[innerEnd:]
+			offset = innerStart + len(protectedInner) + len(closeTag)
+		} else {
+			offset = endIdx
+		}
+	}
+
+	return result
+}
+
+// protectExpressionsInContent replaces curly braces with marker to prevent evaluation
+func protectExpressionsInContent(content string) string {
+	// Replace { with marker so the expression regex won't match
+	result := strings.ReplaceAll(content, "{", fetchExprMarker+"OPEN"+fetchExprMarker)
+	result = strings.ReplaceAll(result, "}", fetchExprMarker+"CLOSE"+fetchExprMarker)
+	return result
+}
+
+// restoreFetchExpressions restores protected expressions
+func restoreFetchExpressions(html string) string {
+	result := strings.ReplaceAll(html, fetchExprMarker+"OPEN"+fetchExprMarker, "{")
+	result = strings.ReplaceAll(result, fetchExprMarker+"CLOSE"+fetchExprMarker, "}")
+	return result
+}
+
+// ProcessFetchElements processes HTML to find fetch elements and generate JavaScript
+func ProcessFetchElements(html string) (string, error) {
+	result := html
+	fetchElements := findFetchElements(result)
+
+	if len(fetchElements) == 0 {
+		return result, nil
+	}
+
+	// Process each fetch element from end to start (to preserve indices)
+	for i := len(fetchElements) - 1; i >= 0; i-- {
+		fe := fetchElements[i]
+
+		// Generate a unique ID for this fetch element
+		fetchCounter++
+		fe.ID = fmt.Sprintf("gtml-fetch-%d", fetchCounter)
+
+		// Process the element and generate JavaScript
+		processedElement, script, err := processSingleFetchElement(fe)
+		if err != nil {
+			return "", fmt.Errorf("error processing fetch element: %v", err)
+		}
+
+		// Replace the original element with the processed version and script
+		result = result[:fe.StartIdx] + processedElement + script + result[fe.EndIdx:]
+	}
+
+	return result, nil
+}
+
+// findFetchElements finds all elements with the fetch attribute
+func findFetchElements(html string) []FetchElement {
+	var elements []FetchElement
+	offset := 0
+
+	for {
+		// Find next element with fetch attribute
+		searchArea := html[offset:]
+		loc := reFetchAttr.FindStringIndex(searchArea)
+		if loc == nil {
+			break
+		}
+
+		// Find the start of this element (go back to find <)
+		fetchAttrPos := offset + loc[0]
+		elementStart := -1
+		for i := fetchAttrPos; i >= 0; i-- {
+			if html[i] == '<' && i+1 < len(html) && html[i+1] != '/' {
+				elementStart = i
+				break
+			}
+		}
+		if elementStart == -1 {
+			offset = fetchAttrPos + 1
+			continue
+		}
+
+		// Parse the element
+		startIdx, endIdx, tagName, isSelfClosing, attrsStr, innerContent := findElementAt(html, elementStart)
+		if startIdx == -1 {
+			offset = fetchAttrPos + 1
+			continue
+		}
+
+		// Extract fetch attribute value
+		fetchMatch := reFetchAttr.FindStringSubmatch(attrsStr)
+		if fetchMatch == nil {
+			offset = endIdx
+			continue
+		}
+		fetchValue := fetchMatch[1]
+
+		// Parse METHOD URL format
+		parts := strings.SplitN(strings.TrimSpace(fetchValue), " ", 2)
+		if len(parts) != 2 {
+			offset = endIdx
+			continue
+		}
+		method := strings.ToUpper(parts[0])
+		url := parts[1]
+
+		// Extract 'as' attribute if present
+		asName := ""
+		if asMatch := reAsAttr.FindStringSubmatch(attrsStr); asMatch != nil {
+			asName = asMatch[1]
+		}
+
+		fe := FetchElement{
+			Method:       method,
+			URL:          url,
+			AsName:       asName,
+			StartIdx:     startIdx,
+			EndIdx:       endIdx,
+			TagName:      tagName,
+			InnerContent: innerContent,
+			FullElement:  html[startIdx:endIdx],
+		}
+
+		if isSelfClosing {
+			fe.InnerContent = ""
+		}
+
+		elements = append(elements, fe)
+		offset = endIdx
+	}
+
+	return elements
+}
+
+// findElementAt finds the element starting at the given position
+func findElementAt(html string, start int) (int, int, string, bool, string, string) {
+	if start >= len(html) || html[start] != '<' {
+		return -1, -1, "", false, "", ""
+	}
+
+	// Find tag name
+	tagEnd := start + 1
+	for tagEnd < len(html) && html[tagEnd] != ' ' && html[tagEnd] != '>' && html[tagEnd] != '/' {
+		tagEnd++
+	}
+	tagName := html[start+1 : tagEnd]
+
+	// Find the end of opening tag
+	closeBracket := strings.IndexAny(html[tagEnd:], ">")
+	if closeBracket == -1 {
+		return -1, -1, "", false, "", ""
+	}
+	attrEnd := tagEnd + closeBracket
+
+	fullOpenTag := html[start : attrEnd+1]
+	attrsStr := html[tagEnd:attrEnd]
+
+	// Check for self-closing
+	if strings.HasSuffix(fullOpenTag, "/>") {
+		return start, attrEnd + 1, tagName, true, strings.TrimSuffix(attrsStr, "/"), ""
+	}
+
+	// Find matching closing tag
+	closingTag := "</" + tagName + ">"
+	nestLevel := 1
+	searchStart := attrEnd + 1
+	openingTagPrefix := "<" + tagName
+
+	for nestLevel > 0 {
+		nextCloseIdx := strings.Index(html[searchStart:], closingTag)
+		if nextCloseIdx == -1 {
+			return -1, -1, "", false, "", ""
+		}
+
+		// Count nested opens in this chunk
+		chunk := html[searchStart : searchStart+nextCloseIdx]
+		nestedOpens := countTagOccurrences(chunk, openingTagPrefix)
+
+		if nestedOpens == 0 {
+			// Found our closing tag
+			innerContent := html[attrEnd+1 : searchStart+nextCloseIdx]
+			return start, searchStart + nextCloseIdx + len(closingTag), tagName, false, attrsStr, innerContent
+		}
+
+		// Need to skip past nested elements
+		for j := 0; j < nestedOpens; j++ {
+			nextCloseIdx = strings.Index(html[searchStart:], closingTag)
+			if nextCloseIdx == -1 {
+				return -1, -1, "", false, "", ""
+			}
+			searchStart += nextCloseIdx + len(closingTag)
+		}
+	}
+
+	return -1, -1, "", false, "", ""
+}
+
+// countTagOccurrences counts how many times an opening tag appears in a string
+func countTagOccurrences(s, tagPrefix string) int {
+	count := 0
+	idx := 0
+	for {
+		loc := strings.Index(s[idx:], tagPrefix)
+		if loc == -1 {
+			break
+		}
+		// Check if followed by space, > or /
+		checkPos := idx + loc + len(tagPrefix)
+		if checkPos < len(s) {
+			c := s[checkPos]
+			if c == ' ' || c == '>' || c == '/' {
+				count++
+			}
+		}
+		idx += loc + 1
+	}
+	return count
+}
+
+// processSingleFetchElement processes a single fetch element and returns the modified HTML and script
+func processSingleFetchElement(fe FetchElement) (string, string, error) {
+	// Extract suspense, fallback, and regular content
+	suspenseContent, fallbackContent, regularContent := extractFetchChildren(fe.InnerContent)
+
+	// Process for loops in the regular content
+	processedContent, forLoops := processForElements(regularContent)
+
+	// Build the modified element HTML by removing fetch-related attributes from opening tag
+	// Find where the opening tag ends
+	openTagEnd := strings.Index(fe.FullElement, ">")
+	if openTagEnd == -1 {
+		return "", "", fmt.Errorf("invalid element: missing >")
+	}
+
+	// Get just the opening tag
+	openTag := fe.FullElement[:openTagEnd+1]
+
+	// Remove fetch and as attributes from the opening tag
+	modifiedOpenTag := reFetchAttr.ReplaceAllString(openTag, "")
+	modifiedOpenTag = reAsAttr.ReplaceAllString(modifiedOpenTag, "")
+
+	// Add the unique ID to the tag
+	// Find position to insert ID (after tag name)
+	spacePos := strings.IndexAny(modifiedOpenTag, " >")
+	if spacePos == -1 {
+		spacePos = len(modifiedOpenTag) - 1
+	}
+
+	if modifiedOpenTag[spacePos] == '>' {
+		// No existing attributes, insert ID before >
+		modifiedOpenTag = modifiedOpenTag[:spacePos] + fmt.Sprintf(" id=\"%s\"", fe.ID) + modifiedOpenTag[spacePos:]
+	} else {
+		// Has attributes, insert ID after tag name
+		modifiedOpenTag = modifiedOpenTag[:spacePos] + fmt.Sprintf(" id=\"%s\"", fe.ID) + modifiedOpenTag[spacePos:]
+	}
+
+	// Build the complete element with closing tag but empty content
+	// (content will be filled by JavaScript)
+	modifiedElement := modifiedOpenTag + "</" + fe.TagName + ">"
+
+	// Generate the JavaScript
+	script := generateFetchScript(fe, suspenseContent, fallbackContent, processedContent, forLoops)
+
+	return modifiedElement, script, nil
+}
+
+// extractFetchChildren extracts suspense, fallback, and regular content from fetch element children
+func extractFetchChildren(content string) (suspense, fallback, regular string) {
+	// Find and extract suspense element
+	suspenseStart := findElementWithAttr(content, "suspense")
+	if suspenseStart != -1 {
+		startIdx, endIdx, _, _, _, inner := findElementAt(content, suspenseStart)
+		if startIdx != -1 {
+			suspense = inner
+			content = content[:startIdx] + content[endIdx:]
+		}
+	}
+
+	// Find and extract fallback element
+	fallbackStart := findElementWithAttr(content, "fallback")
+	if fallbackStart != -1 {
+		startIdx, endIdx, _, _, _, inner := findElementAt(content, fallbackStart)
+		if startIdx != -1 {
+			fallback = inner
+			content = content[:startIdx] + content[endIdx:]
+		}
+	}
+
+	regular = strings.TrimSpace(content)
+	return
+}
+
+// findElementWithAttr finds the start position of an element with the given attribute
+func findElementWithAttr(html string, attrName string) int {
+	pattern := regexp.MustCompile(`<\w+[^>]*\s+` + attrName + `(\s|>|/)`)
+	loc := pattern.FindStringIndex(html)
+	if loc == nil {
+		return -1
+	}
+	return loc[0]
+}
+
+// forLoopCounter is used to generate unique IDs for for loops
+var forLoopCounter int
+
+// processForElements finds and processes elements with for attributes
+func processForElements(content string) (string, []ForLoop) {
+	var forLoops []ForLoop
+	result := content
+
+	// Find all elements with for attribute
+	offset := 0
+	for {
+		loc := reForAttr.FindStringIndex(result[offset:])
+		if loc == nil {
+			break
+		}
+
+		// Find start of element
+		forAttrPos := offset + loc[0]
+		elementStart := -1
+		for i := forAttrPos; i >= 0; i-- {
+			if result[i] == '<' && i+1 < len(result) && result[i+1] != '/' {
+				elementStart = i
+				break
+			}
+		}
+		if elementStart == -1 {
+			offset = forAttrPos + 1
+			continue
+		}
+
+		// Parse the element
+		startIdx, endIdx, tagName, _, attrsStr, innerContent := findElementAt(result, elementStart)
+		if startIdx == -1 {
+			offset = forAttrPos + 1
+			continue
+		}
+
+		// Extract for attribute value
+		forMatch := reForAttr.FindStringSubmatch(attrsStr)
+		if forMatch == nil {
+			offset = endIdx
+			continue
+		}
+		forValue := forMatch[1]
+
+		// Parse "item in items" format
+		forLoop, err := ParseForAttribute(forValue)
+		if err != nil {
+			offset = endIdx
+			continue
+		}
+
+		// Recursively process nested for loops in inner content
+		processedInner, nestedLoops := processForElements(innerContent)
+
+		// Assign unique ID to this for loop
+		forLoopCounter++
+		templateID := fmt.Sprintf("gtml-for-%d", forLoopCounter)
+		forLoop.TemplateID = templateID
+
+		forLoops = append(forLoops, forLoop)
+		// Append nested loops
+		forLoops = append(forLoops, nestedLoops...)
+
+		// Remove for attribute and add template markers
+		newAttrs := reForAttr.ReplaceAllString(attrsStr, "")
+		newElement := fmt.Sprintf("<%s%s data-gtml-for=\"%s\" data-gtml-item=\"%s\" data-gtml-source=\"%s\" style=\"display:none\">%s</%s>",
+			tagName, newAttrs, templateID, forLoop.ItemName, forLoop.SourcePath, processedInner, tagName)
+
+		result = result[:startIdx] + newElement + result[endIdx:]
+		offset = startIdx + len(newElement)
+	}
+
+	return result, forLoops
+}
+
+// ParseForAttribute parses a for attribute value like "user in users" or "color in user.colors"
+func ParseForAttribute(value string) (ForLoop, error) {
+	parts := strings.Split(strings.TrimSpace(value), " in ")
+	if len(parts) != 2 {
+		return ForLoop{}, fmt.Errorf("invalid for attribute format: expected 'item in items', got '%s'", value)
+	}
+
+	itemName := strings.TrimSpace(parts[0])
+	sourcePath := strings.TrimSpace(parts[1])
+
+	// Get the base source name (first part before any dots)
+	sourceName := sourcePath
+	if idx := strings.Index(sourcePath, "."); idx != -1 {
+		sourceName = sourcePath[:idx]
+	}
+
+	return ForLoop{
+		ItemName:   itemName,
+		SourceName: sourceName,
+		SourcePath: sourcePath,
+	}, nil
+}
+
+// generateFetchScript generates the JavaScript code for a fetch element
+func generateFetchScript(fe FetchElement, suspenseContent, fallbackContent, regularContent string, forLoops []ForLoop) string {
+	var script strings.Builder
+	script.WriteString("\n<script>\n(function() {\n")
+
+	// Get references to the container
+	script.WriteString(fmt.Sprintf("  const container = document.getElementById('%s');\n", fe.ID))
+	script.WriteString("  if (!container) return;\n\n")
+
+	// Create suspense element if needed
+	if suspenseContent != "" {
+		script.WriteString("  // Create and show suspense element\n")
+		script.WriteString("  const suspenseEl = document.createElement('div');\n")
+		script.WriteString(fmt.Sprintf("  suspenseEl.innerHTML = `%s`;\n", escapeJSTemplate(suspenseContent)))
+		script.WriteString("  suspenseEl.setAttribute('data-gtml-suspense', '');\n")
+		script.WriteString("  container.appendChild(suspenseEl);\n\n")
+	}
+
+	// Create fallback element (hidden initially) if needed
+	if fallbackContent != "" {
+		script.WriteString("  // Create fallback element (hidden initially)\n")
+		script.WriteString("  const fallbackEl = document.createElement('div');\n")
+		script.WriteString(fmt.Sprintf("  fallbackEl.innerHTML = `%s`;\n", escapeJSTemplate(fallbackContent)))
+		script.WriteString("  fallbackEl.setAttribute('data-gtml-fallback', '');\n")
+		script.WriteString("  fallbackEl.style.display = 'none';\n")
+		script.WriteString("  container.appendChild(fallbackEl);\n\n")
+	}
+
+	// Store the template content for iteration
+	script.WriteString("  // Store template content\n")
+	script.WriteString(fmt.Sprintf("  const templateContent = `%s`;\n\n", escapeJSTemplate(regularContent)))
+
+	// Perform the fetch
+	script.WriteString(fmt.Sprintf("  fetch('%s', { method: '%s' })\n", fe.URL, fe.Method))
+	script.WriteString("    .then(response => {\n")
+	script.WriteString("      if (!response.ok) throw new Error('Request failed');\n")
+	script.WriteString("      return response.json();\n")
+	script.WriteString("    })\n")
+	script.WriteString(fmt.Sprintf("    .then(%s => {\n", fe.AsName))
+
+	// Hide suspense
+	if suspenseContent != "" {
+		script.WriteString("      // Hide suspense\n")
+		script.WriteString("      const suspense = container.querySelector('[data-gtml-suspense]');\n")
+		script.WriteString("      if (suspense) suspense.remove();\n\n")
+	}
+
+	// Process for loops and render content
+	if len(forLoops) > 0 {
+		script.WriteString("      // Process iteration\n")
+		script.WriteString("      const contentDiv = document.createElement('div');\n")
+		script.WriteString("      contentDiv.innerHTML = templateContent;\n\n")
+
+		// Add processForLoops function to handle nested iterations
+		script.WriteString("      // Process all for loops recursively\n")
+		script.WriteString("      function processForLoops(element, scope) {\n")
+		script.WriteString("        const forElements = element.querySelectorAll('[data-gtml-for]');\n")
+		script.WriteString("        forElements.forEach(template => {\n")
+		script.WriteString("          // Skip if already processed (no longer has the attribute)\n")
+		script.WriteString("          if (!template.hasAttribute('data-gtml-for')) return;\n")
+		script.WriteString("          const itemName = template.getAttribute('data-gtml-item');\n")
+		script.WriteString("          const sourcePath = template.getAttribute('data-gtml-source');\n")
+		script.WriteString("          // Get source data from scope using path\n")
+		script.WriteString("          const source = getValueByPath(scope, sourcePath);\n")
+		script.WriteString("          if (!Array.isArray(source)) {\n")
+		script.WriteString("            template.remove();\n")
+		script.WriteString("            return;\n")
+		script.WriteString("          }\n")
+		script.WriteString("          const parent = template.parentNode;\n")
+		script.WriteString("          source.forEach(item => {\n")
+		script.WriteString("            const clone = template.cloneNode(true);\n")
+		script.WriteString("            clone.removeAttribute('data-gtml-for');\n")
+		script.WriteString("            clone.removeAttribute('data-gtml-item');\n")
+		script.WriteString("            clone.removeAttribute('data-gtml-source');\n")
+		script.WriteString("            clone.style.display = '';\n")
+		script.WriteString("            // Create new scope with current item\n")
+		script.WriteString("            const newScope = Object.assign({}, scope);\n")
+		script.WriteString("            newScope[itemName] = item;\n")
+		script.WriteString("            // Replace expressions in text nodes and attributes\n")
+		script.WriteString("            clone.innerHTML = replaceExpressions(clone.innerHTML, newScope);\n")
+		script.WriteString("            // Recursively process nested for loops\n")
+		script.WriteString("            processForLoops(clone, newScope);\n")
+		script.WriteString("            parent.insertBefore(clone, template);\n")
+		script.WriteString("          });\n")
+		script.WriteString("          template.remove();\n")
+		script.WriteString("        });\n")
+		script.WriteString("      }\n\n")
+
+		// Initial scope with the fetched data
+		script.WriteString(fmt.Sprintf("      const initialScope = { '%s': %s };\n", fe.AsName, fe.AsName))
+		script.WriteString("      processForLoops(contentDiv, initialScope);\n\n")
+
+		script.WriteString("      container.innerHTML = contentDiv.innerHTML;\n")
+	} else {
+		script.WriteString("      // Render content directly\n")
+		script.WriteString("      container.innerHTML = templateContent;\n")
+	}
+
+	script.WriteString("    })\n")
+	script.WriteString("    .catch(error => {\n")
+	script.WriteString("      console.error('Fetch error:', error);\n")
+
+	// Show fallback on error
+	if suspenseContent != "" {
+		script.WriteString("      // Hide suspense\n")
+		script.WriteString("      const suspense = container.querySelector('[data-gtml-suspense]');\n")
+		script.WriteString("      if (suspense) suspense.remove();\n")
+	}
+	if fallbackContent != "" {
+		script.WriteString("      // Show fallback\n")
+		script.WriteString("      const fallback = container.querySelector('[data-gtml-fallback]');\n")
+		script.WriteString("      if (fallback) fallback.style.display = '';\n")
+	}
+
+	script.WriteString("    });\n\n")
+
+	// Add helper function for getting value by path
+	script.WriteString("  // Get value from object by dot-notation path\n")
+	script.WriteString("  function getValueByPath(obj, path) {\n")
+	script.WriteString("    const parts = path.split('.');\n")
+	script.WriteString("    let value = obj[parts[0]];\n")
+	script.WriteString("    for (let i = 1; i < parts.length && value !== undefined; i++) {\n")
+	script.WriteString("      value = value[parts[i]];\n")
+	script.WriteString("    }\n")
+	script.WriteString("    return value;\n")
+	script.WriteString("  }\n\n")
+
+	// Add helper function for expression replacement
+	script.WriteString("  // Helper function to replace expressions like {user.name} with actual values\n")
+	script.WriteString("  function replaceExpressions(html, scope) {\n")
+	script.WriteString("    return html.replace(/\\{([^}]+)\\}/g, (match, expr) => {\n")
+	script.WriteString("      expr = expr.trim();\n")
+	script.WriteString("      // Try to resolve the expression from scope\n")
+	script.WriteString("      const parts = expr.split('.');\n")
+	script.WriteString("      let value = scope[parts[0]];\n")
+	script.WriteString("      for (let i = 1; i < parts.length && value !== undefined; i++) {\n")
+	script.WriteString("        value = value[parts[i]];\n")
+	script.WriteString("      }\n")
+	script.WriteString("      return value !== undefined ? value : match;\n")
+	script.WriteString("    });\n")
+	script.WriteString("  }\n")
+
+	script.WriteString("})();\n</script>\n")
+
+	return script.String()
+}
+
+// escapeJSTemplate escapes a string for use in JavaScript template literals
+func escapeJSTemplate(s string) string {
+	s = strings.ReplaceAll(s, "\\", "\\\\")
+	s = strings.ReplaceAll(s, "`", "\\`")
+	s = strings.ReplaceAll(s, "${", "\\${")
+	return s
 }
 
 type CompileOptions struct {

@@ -1,0 +1,95 @@
+<DocsLayout title="Basic Fetch">
+  <slot name='content' tag='div'>
+    <DocsNavbar currentPage="components" />
+
+    <div class="flex">
+      <DocsSidebar currentPage="basic-fetch" />
+
+      <main class="flex-1 p-8 max-w-4xl">
+        <div class="mb-8">
+          <a href="/docs" class="text-blue-600 hover:text-blue-800 flex items-center mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+          </a>
+          <h1 class="text-3xl font-bold text-gray-900">Basic Fetch</h1>
+          <p class="text-gray-600 mt-2">Fetch data from an API and iterate over the results using the fetch and for attributes.</p>
+        </div>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">gtml Code</h2>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET https://jsonplaceholder.typicode.com/posts' as='posts'&gt;
+  &lt;ul class="space-y-4"&gt;
+    &lt;li for='post in posts' class="p-4 bg-white rounded shadow"&gt;
+      &lt;h3 class="font-bold"&gt;&#123;post.title&#125;&lt;/h3&gt;
+      &lt;p class="text-gray-600"&gt;&#123;post.body&#125;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example</h2>
+          <p class="text-gray-600 mb-4">This example fetches posts from JSONPlaceholder and displays the first 5:</p>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50 max-h-96 overflow-y-auto">
+            <div fetch='GET https://jsonplaceholder.typicode.com/posts?_limit=5' as='posts'>
+              <ul class="space-y-4">
+                <li for='post in posts' class="p-4 bg-white rounded shadow">
+                  <h3 class="font-bold text-gray-900">{post.title}</h3>
+                  <p class="text-gray-600 text-sm mt-2">{post.body}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">How It Works</h2>
+          <div class="prose prose-gray max-w-none">
+            <ol class="list-decimal list-inside space-y-2 text-gray-700">
+              <li>The <code class="bg-gray-100 px-1 rounded">fetch</code> attribute specifies the HTTP method and URL</li>
+              <li>The <code class="bg-gray-100 px-1 rounded">as</code> attribute names the fetched data for use in templates</li>
+              <li>The <code class="bg-gray-100 px-1 rounded">for</code> attribute iterates over the array: <code class="bg-gray-100 px-1 rounded">for='item in items'</code></li>
+              <li>Use curly braces to access properties: <code class="bg-gray-100 px-1 rounded">&#123;post.title&#125;</code></li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Attributes</h2>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Attribute</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Format</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">fetch</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">METHOD URL</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">HTTP method (GET, POST, PUT, DELETE) followed by the URL</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">as</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">string</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Name to reference the fetched data in templates</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">for</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">item in items</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Iterates over an array, making each item available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </slot>
+</DocsLayout>

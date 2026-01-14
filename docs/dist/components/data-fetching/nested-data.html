@@ -1,0 +1,377 @@
+<html data-docslayout="">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nested Data - gtml</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--<link rel="stylesheet" href="/static/styles.css">-->
+  </head>
+  <body class="bg-white text-gray-900 min-h-screen">
+    <div>
+    <nav data-docsnavbar="" class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <a href="/" class="text-xl font-bold text-gray-800">gtml</a>
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <a href="/" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Home</a>
+          <a href="/docs" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Documentation</a>
+          <a href="/docs/components" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Components</a>
+          <a href="https://github.com/phillip-england/gtml" target="_blank" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    <div class="flex">
+      <div data-docssidebar="">
+  <aside class="hidden lg:block w-64 bg-gray-50 border-r border-gray-200 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
+    <nav class="p-4 space-y-8">
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Alerts</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/alerts/alert-success" class="block px-2 py-1 text-sm false">AlertSuccess</a></li>
+          <li><a href="/components/alerts/alert-error" class="block px-2 py-1 text-sm false">AlertError</a></li>
+          <li><a href="/components/alerts/alert-warning" class="block px-2 py-1 text-sm false">AlertWarning</a></li>
+          <li><a href="/components/alerts/alert-info" class="block px-2 py-1 text-sm false">AlertInfo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Badges</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/badges/badge-primary" class="block px-2 py-1 text-sm false">BadgePrimary</a></li>
+          <li><a href="/components/badges/badge-success" class="block px-2 py-1 text-sm false">BadgeSuccess</a></li>
+          <li><a href="/components/badges/badge-warning" class="block px-2 py-1 text-sm false">BadgeWarning</a></li>
+          <li><a href="/components/badges/badge-danger" class="block px-2 py-1 text-sm false">BadgeDanger</a></li>
+          <li><a href="/components/badges/skill-badge" class="block px-2 py-1 text-sm false">SkillBadge</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Buttons</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/buttons/button-primary" class="block px-2 py-1 text-sm false">ButtonPrimary</a></li>
+          <li><a href="/components/buttons/button-secondary" class="block px-2 py-1 text-sm false">ButtonSecondary</a></li>
+          <li><a href="/components/buttons/button-outline" class="block px-2 py-1 text-sm false">ButtonOutline</a></li>
+          <li><a href="/components/buttons/button-danger" class="block px-2 py-1 text-sm false">ButtonDanger</a></li>
+          <li><a href="/components/buttons/button-success" class="block px-2 py-1 text-sm false">ButtonSuccess</a></li>
+          <li><a href="/components/buttons/button-sm" class="block px-2 py-1 text-sm false">ButtonSm</a></li>
+          <li><a href="/components/buttons/button-lg" class="block px-2 py-1 text-sm false">ButtonLg</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Cards</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/cards/card-basic" class="block px-2 py-1 text-sm false">CardBasic</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Display</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/display/avatar" class="block px-2 py-1 text-sm false">Avatar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Feedback</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/feedback/notification" class="block px-2 py-1 text-sm false">Notification</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Data Fetching</h3>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/components/data-fetching/basic-fetch" class="block px-2 py-1 text-sm false">Basic Fetch</a></li>
+          <li><a href="/components/data-fetching/nested-data" class="block px-2 py-1 text-sm false">Nested Data</a></li>
+          <li><a href="/components/data-fetching/loading-states" class="block px-2 py-1 text-sm false">Loading States</a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+</div>
+
+      <main class="flex-1 p-8 max-w-4xl">
+        <div class="mb-8">
+          <a href="/docs" class="text-blue-600 hover:text-blue-800 flex items-center mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+          </a>
+          <h1 class="text-3xl font-bold text-gray-900">Nested Data</h1>
+          <p class="text-gray-600 mt-2">Access nested properties and iterate over nested arrays in fetched data.</p>
+        </div>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Accessing Nested Properties</h2>
+          <p class="text-gray-600 mb-4">Use dot notation to access nested object properties:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET https://jsonplaceholder.typicode.com/users' as='users'&gt;
+  &lt;div for='user in users'&gt;
+    &lt;h3&gt;&#123;user.name&#125;&lt;/h3&gt;
+    &lt;p&gt;City: &#123;user.address.city&#125;&lt;/p&gt;
+    &lt;p&gt;Company: &#123;user.company.name&#125;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example: User Cards with Nested Data</h2>
+          <p class="text-gray-600 mb-4">This example displays user information including nested address and company data:</p>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50 max-h-[500px] overflow-y-auto">
+            <div id="gtml-fetch-5"></div>
+<script>
+(function() {
+  const container = document.getElementById('gtml-fetch-5');
+  if (!container) return;
+
+  // Store template content
+  const templateContent = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-white rounded-lg shadow" data-gtml-for="gtml-for-5" data-gtml-item="user" data-gtml-source="users" style="display:none">
+                  <h3 class="font-bold text-gray-900 text-lg">{user.name}</h3>
+                  <p class="text-gray-500 text-sm">{user.email}</p>
+                  <div class="mt-3 pt-3 border-t border-gray-100">
+                    <p class="text-sm"><span class="font-medium text-gray-700">City:</span> <span class="text-gray-600">{user.address.city}</span></p>
+                    <p class="text-sm"><span class="font-medium text-gray-700">Company:</span> <span class="text-gray-600">{user.company.name}</span></p>
+                    <p class="text-sm"><span class="font-medium text-gray-700">Website:</span> <span class="text-blue-600">{user.website}</span></p>
+                  </div>
+                </div>
+              </div>`;
+
+  fetch('https://jsonplaceholder.typicode.com/users?_limit=4', { method: 'GET' })
+    .then(response => {
+      if (!response.ok) throw new Error('Request failed');
+      return response.json();
+    })
+    .then(users => {
+      // Process iteration
+      const contentDiv = document.createElement('div');
+      contentDiv.innerHTML = templateContent;
+
+      // Process all for loops recursively
+      function processForLoops(element, scope) {
+        const forElements = element.querySelectorAll('[data-gtml-for]');
+        forElements.forEach(template => {
+          // Skip if already processed (no longer has the attribute)
+          if (!template.hasAttribute('data-gtml-for')) return;
+          const itemName = template.getAttribute('data-gtml-item');
+          const sourcePath = template.getAttribute('data-gtml-source');
+          // Get source data from scope using path
+          const source = getValueByPath(scope, sourcePath);
+          if (!Array.isArray(source)) {
+            template.remove();
+            return;
+          }
+          const parent = template.parentNode;
+          source.forEach(item => {
+            const clone = template.cloneNode(true);
+            clone.removeAttribute('data-gtml-for');
+            clone.removeAttribute('data-gtml-item');
+            clone.removeAttribute('data-gtml-source');
+            clone.style.display = '';
+            // Create new scope with current item
+            const newScope = Object.assign({}, scope);
+            newScope[itemName] = item;
+            // Replace expressions in text nodes and attributes
+            clone.innerHTML = replaceExpressions(clone.innerHTML, newScope);
+            // Recursively process nested for loops
+            processForLoops(clone, newScope);
+            parent.insertBefore(clone, template);
+          });
+          template.remove();
+        });
+      }
+
+      const initialScope = { 'users': users };
+      processForLoops(contentDiv, initialScope);
+
+      container.innerHTML = contentDiv.innerHTML;
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+
+  // Get value from object by dot-notation path
+  function getValueByPath(obj, path) {
+    const parts = path.split('.');
+    let value = obj[parts[0]];
+    for (let i = 1; i < parts.length && value !== undefined; i++) {
+      value = value[parts[i]];
+    }
+    return value;
+  }
+
+  // Helper function to replace expressions like {user.name} with actual values
+  function replaceExpressions(html, scope) {
+    return html.replace(/\{([^}]+)\}/g, (match, expr) => {
+      expr = expr.trim();
+      // Try to resolve the expression from scope
+      const parts = expr.split('.');
+      let value = scope[parts[0]];
+      for (let i = 1; i < parts.length && value !== undefined; i++) {
+        value = value[parts[i]];
+      }
+      return value !== undefined ? value : match;
+    });
+  }
+})();
+</script>
+
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Nested Iteration</h2>
+          <p class="text-gray-600 mb-4">You can also iterate over nested arrays within each item:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET /api/users' as='users'&gt;
+  &lt;div for='user in users'&gt;
+    &lt;h3&gt;&#123;user.name&#125;&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li for='tag in user.tags'&gt;&#123;tag&#125;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example: Posts with Comments</h2>
+          <p class="text-gray-600 mb-4">Fetching a post and displaying its nested comments:</p>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div id="gtml-fetch-4"></div>
+<script>
+(function() {
+  const container = document.getElementById('gtml-fetch-4');
+  if (!container) return;
+
+  // Store template content
+  const templateContent = `<div class="bg-white rounded-lg shadow p-4">
+                <h3 class="font-bold text-gray-900 mb-4">Comments on Post #1</h3>
+                <div class="space-y-3">
+                  <div class="p-3 bg-gray-50 rounded border-l-4 border-blue-500" data-gtml-for="gtml-for-4" data-gtml-item="comment" data-gtml-source="comments" style="display:none">
+                    <p class="font-medium text-gray-900">{comment.name}</p>
+                    <p class="text-sm text-gray-500">{comment.email}</p>
+                    <p class="text-gray-700 mt-2 text-sm">{comment.body}</p>
+                  </div>
+                </div>
+              </div>`;
+
+  fetch('https://jsonplaceholder.typicode.com/posts/1/comments?_limit=3', { method: 'GET' })
+    .then(response => {
+      if (!response.ok) throw new Error('Request failed');
+      return response.json();
+    })
+    .then(comments => {
+      // Process iteration
+      const contentDiv = document.createElement('div');
+      contentDiv.innerHTML = templateContent;
+
+      // Process all for loops recursively
+      function processForLoops(element, scope) {
+        const forElements = element.querySelectorAll('[data-gtml-for]');
+        forElements.forEach(template => {
+          // Skip if already processed (no longer has the attribute)
+          if (!template.hasAttribute('data-gtml-for')) return;
+          const itemName = template.getAttribute('data-gtml-item');
+          const sourcePath = template.getAttribute('data-gtml-source');
+          // Get source data from scope using path
+          const source = getValueByPath(scope, sourcePath);
+          if (!Array.isArray(source)) {
+            template.remove();
+            return;
+          }
+          const parent = template.parentNode;
+          source.forEach(item => {
+            const clone = template.cloneNode(true);
+            clone.removeAttribute('data-gtml-for');
+            clone.removeAttribute('data-gtml-item');
+            clone.removeAttribute('data-gtml-source');
+            clone.style.display = '';
+            // Create new scope with current item
+            const newScope = Object.assign({}, scope);
+            newScope[itemName] = item;
+            // Replace expressions in text nodes and attributes
+            clone.innerHTML = replaceExpressions(clone.innerHTML, newScope);
+            // Recursively process nested for loops
+            processForLoops(clone, newScope);
+            parent.insertBefore(clone, template);
+          });
+          template.remove();
+        });
+      }
+
+      const initialScope = { 'comments': comments };
+      processForLoops(contentDiv, initialScope);
+
+      container.innerHTML = contentDiv.innerHTML;
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+
+  // Get value from object by dot-notation path
+  function getValueByPath(obj, path) {
+    const parts = path.split('.');
+    let value = obj[parts[0]];
+    for (let i = 1; i < parts.length && value !== undefined; i++) {
+      value = value[parts[i]];
+    }
+    return value;
+  }
+
+  // Helper function to replace expressions like {user.name} with actual values
+  function replaceExpressions(html, scope) {
+    return html.replace(/\{([^}]+)\}/g, (match, expr) => {
+      expr = expr.trim();
+      // Try to resolve the expression from scope
+      const parts = expr.split('.');
+      let value = scope[parts[0]];
+      for (let i = 1; i < parts.length && value !== undefined; i++) {
+        value = value[parts[i]];
+      }
+      return value !== undefined ? value : match;
+    });
+  }
+})();
+</script>
+
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Supported Path Syntax</h2>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Syntax</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Example</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Direct property</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">&#123;user.name&#125;</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Access a direct property of the item</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Nested property</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">&#123;user.address.city&#125;</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Access nested object properties with dot notation</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Deep nesting</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">&#123;user.address.geo.lat&#125;</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Access deeply nested properties</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  </body>
+</html>

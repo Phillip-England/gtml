@@ -1,0 +1,167 @@
+<DocsLayout title="Loading States">
+  <slot name='content' tag='div'>
+    <DocsNavbar currentPage="components" />
+
+    <div class="flex">
+      <DocsSidebar currentPage="loading-states" />
+
+      <main class="flex-1 p-8 max-w-4xl">
+        <div class="mb-8">
+          <a href="/docs" class="text-blue-600 hover:text-blue-800 flex items-center mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+          </a>
+          <h1 class="text-3xl font-bold text-gray-900">Loading States</h1>
+          <p class="text-gray-600 mt-2">Handle loading and error states with suspense and fallback elements.</p>
+        </div>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Suspense Element</h2>
+          <p class="text-gray-600 mb-4">The <code class="bg-gray-100 px-1 rounded">suspense</code> attribute marks content to show while data is loading:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET https://jsonplaceholder.typicode.com/posts' as='posts'&gt;
+  &lt;div suspense&gt;
+    &lt;p&gt;Loading posts...&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;ul&gt;
+    &lt;li for='post in posts'&gt;&#123;post.title&#125;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example: Loading Spinner</h2>
+          <p class="text-gray-600 mb-4">A loading spinner that appears while fetching todos:</p>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div fetch='GET https://jsonplaceholder.typicode.com/todos?_limit=5' as='todos'>
+              <div suspense class="flex items-center justify-center py-8">
+                <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="ml-2 text-gray-600">Loading todos...</span>
+              </div>
+              <ul class="space-y-2">
+                <li for='todo in todos' class="flex items-center p-3 bg-white rounded shadow">
+                  <span class="w-6 h-6 rounded-full mr-3 flex items-center justify-center {todo.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                  </span>
+                  <span class="text-gray-700">{todo.title}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Fallback Element</h2>
+          <p class="text-gray-600 mb-4">The <code class="bg-gray-100 px-1 rounded">fallback</code> attribute marks content to show if the request fails:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET https://api.example.com/data' as='data'&gt;
+  &lt;div suspense&gt;
+    &lt;p&gt;Loading...&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div fallback&gt;
+    &lt;p&gt;Failed to load data. Please try again.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;ul&gt;
+    &lt;li for='item in data'&gt;&#123;item.name&#125;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Complete Example</h2>
+          <p class="text-gray-600 mb-4">Combining suspense, fallback, and data display:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET https://jsonplaceholder.typicode.com/albums' as='albums'&gt;
+  &lt;!-- Loading state --&gt;
+  &lt;div suspense class="p-4 bg-blue-50 rounded"&gt;
+    &lt;p class="text-blue-700"&gt;Loading albums...&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Error state --&gt;
+  &lt;div fallback class="p-4 bg-red-50 rounded"&gt;
+    &lt;p class="text-red-700"&gt;Failed to load albums.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Success state --&gt;
+  &lt;div class="grid grid-cols-2 gap-4"&gt;
+    &lt;div for='album in albums' class="p-4 bg-white rounded shadow"&gt;
+      &lt;p&gt;&#123;album.title&#125;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div fetch='GET https://jsonplaceholder.typicode.com/albums?_limit=6' as='albums'>
+              <div suspense class="p-4 bg-blue-50 rounded border border-blue-200">
+                <div class="flex items-center">
+                  <svg class="animate-spin h-5 w-5 text-blue-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <p class="text-blue-700">Loading albums...</p>
+                </div>
+              </div>
+              <div fallback class="p-4 bg-red-50 rounded border border-red-200">
+                <p class="text-red-700">Failed to load albums. Please try again later.</p>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div for='album in albums' class="p-4 bg-white rounded shadow">
+                  <p class="text-gray-900 font-medium">Album #{album.id}</p>
+                  <p class="text-gray-600 text-sm mt-1">{album.title}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Attributes Reference</h2>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Attribute</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Behavior</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">suspense</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Shown during fetch</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Content displayed while the request is in flight. Removed when data loads.</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">fallback</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Shown on error</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Content displayed if the request fails or returns non-JSON data.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">When Fallback Triggers</h2>
+          <div class="prose prose-gray max-w-none">
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+              <li>Network errors (no connection, timeout)</li>
+              <li>HTTP error status codes (4xx, 5xx)</li>
+              <li>Response is not valid JSON</li>
+              <li>Server returns an unexpected format</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+  </slot>
+</DocsLayout>

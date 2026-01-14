@@ -1,0 +1,122 @@
+<DocsLayout title="Nested Data">
+  <slot name='content' tag='div'>
+    <DocsNavbar currentPage="components" />
+
+    <div class="flex">
+      <DocsSidebar currentPage="nested-data" />
+
+      <main class="flex-1 p-8 max-w-4xl">
+        <div class="mb-8">
+          <a href="/docs" class="text-blue-600 hover:text-blue-800 flex items-center mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+          </a>
+          <h1 class="text-3xl font-bold text-gray-900">Nested Data</h1>
+          <p class="text-gray-600 mt-2">Access nested properties and iterate over nested arrays in fetched data.</p>
+        </div>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Accessing Nested Properties</h2>
+          <p class="text-gray-600 mb-4">Use dot notation to access nested object properties:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET https://jsonplaceholder.typicode.com/users' as='users'&gt;
+  &lt;div for='user in users'&gt;
+    &lt;h3&gt;&#123;user.name&#125;&lt;/h3&gt;
+    &lt;p&gt;City: &#123;user.address.city&#125;&lt;/p&gt;
+    &lt;p&gt;Company: &#123;user.company.name&#125;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example: User Cards with Nested Data</h2>
+          <p class="text-gray-600 mb-4">This example displays user information including nested address and company data:</p>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50 max-h-[500px] overflow-y-auto">
+            <div fetch='GET https://jsonplaceholder.typicode.com/users?_limit=4' as='users'>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div for='user in users' class="p-4 bg-white rounded-lg shadow">
+                  <h3 class="font-bold text-gray-900 text-lg">{user.name}</h3>
+                  <p class="text-gray-500 text-sm">{user.email}</p>
+                  <div class="mt-3 pt-3 border-t border-gray-100">
+                    <p class="text-sm"><span class="font-medium text-gray-700">City:</span> <span class="text-gray-600">{user.address.city}</span></p>
+                    <p class="text-sm"><span class="font-medium text-gray-700">Company:</span> <span class="text-gray-600">{user.company.name}</span></p>
+                    <p class="text-sm"><span class="font-medium text-gray-700">Website:</span> <span class="text-blue-600">{user.website}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Nested Iteration</h2>
+          <p class="text-gray-600 mb-4">You can also iterate over nested arrays within each item:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div fetch='GET /api/users' as='users'&gt;
+  &lt;div for='user in users'&gt;
+    &lt;h3&gt;&#123;user.name&#125;&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li for='tag in user.tags'&gt;&#123;tag&#125;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Example: Posts with Comments</h2>
+          <p class="text-gray-600 mb-4">Fetching a post and displaying its nested comments:</p>
+          <div class="p-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div fetch='GET https://jsonplaceholder.typicode.com/posts/1/comments?_limit=3' as='comments'>
+              <div class="bg-white rounded-lg shadow p-4">
+                <h3 class="font-bold text-gray-900 mb-4">Comments on Post #1</h3>
+                <div class="space-y-3">
+                  <div for='comment in comments' class="p-3 bg-gray-50 rounded border-l-4 border-blue-500">
+                    <p class="font-medium text-gray-900">{comment.name}</p>
+                    <p class="text-sm text-gray-500">{comment.email}</p>
+                    <p class="text-gray-700 mt-2 text-sm">{comment.body}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Supported Path Syntax</h2>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Syntax</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Example</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Direct property</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">&#123;user.name&#125;</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Access a direct property of the item</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Nested property</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">&#123;user.address.city&#125;</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Access nested object properties with dot notation</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Deep nesting</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">&#123;user.address.geo.lat&#125;</td>
+                  <td class="px-3 py-4 text-sm text-gray-500">Access deeply nested properties</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </slot>
+</DocsLayout>
