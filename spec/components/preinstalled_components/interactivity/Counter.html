@@ -1,0 +1,50 @@
+<div props='initialValue int' class='counter'>
+  <p class='count'>{$count}</p>
+  <div class='buttons'>
+    <button id='decrement'>-</button>
+    <button id='increment'>+</button>
+  </div>
+  <script type='gtml'>
+    $count = $initialValue
+    #decrement.onclick(() => {
+      $count = $count - 1
+    })
+    #increment.onclick(() => {
+      $count = $count + 1
+    })
+  </script>
+</div>
+
+<style>
+  .counter {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .count {
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+  }
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .buttons button {
+    padding: 10px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #4a90d9;
+    color: white;
+    transition: background 0.2s;
+  }
+  .buttons button:hover {
+    background: #357abd;
+  }
+</style>

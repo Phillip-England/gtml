@@ -15,7 +15,7 @@ func TestProps_BasicStringProp(t *testing.T) {
 	input := `<ThatButton text='some title' />`
 	expected := `<button>some title</button>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -33,7 +33,7 @@ func TestProps_MultipleProps(t *testing.T) {
 	input := `<Card heading='Hello' subheading='World' />`
 	expected := `<div><h1>Hello</h1><p>World</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -51,7 +51,7 @@ func TestProps_IntType(t *testing.T) {
 	input := `<Counter count={42} />`
 	expected := `<span>Count: 42</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -69,7 +69,7 @@ func TestProps_IntWithArithmetic(t *testing.T) {
 	input := `<Counter count={40 + 2} />`
 	expected := `<span>Count: 42</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -87,7 +87,7 @@ func TestProps_DoubleQuotes(t *testing.T) {
 	input := `<Message text="Hello World" />`
 	expected := `<p>Hello World</p>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -105,7 +105,7 @@ func TestProps_NonSelfClosingComponent(t *testing.T) {
 	input := `<Wrapper title="Test Title"></Wrapper>`
 	expected := `<div class="wrap">Test Title</div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -124,7 +124,7 @@ func TestProps_NestedComponents(t *testing.T) {
 	input := `<Outer text='unused' />`
 	expected := `<div><span>nested</span></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -141,7 +141,7 @@ func TestProps_PropsRemovedFromOutput(t *testing.T) {
 
 	input := `<MyComp title='Hello' />`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

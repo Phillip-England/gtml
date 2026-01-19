@@ -1,0 +1,329 @@
+<html data-docslayout="">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Components Demo - GTML - gtml</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+  <style>
+/* ColorPicker */
+[data-colorpicker] .color-picker, .color-picker[data-colorpicker] {
+    padding: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+[data-colorpicker] .label, .label[data-colorpicker] {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+  }
+[data-colorpicker] .colors, .colors[data-colorpicker] {
+    display: flex;
+    gap: 10px;
+  }
+[data-colorpicker] .color-btn, .color-btn[data-colorpicker] {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+[data-colorpicker] .color-btn:hover, .color-btn:hover[data-colorpicker] {
+    transform: scale(1.1);
+  }
+[data-colorpicker] .color-btn.selected, .color-btn.selected[data-colorpicker] {
+    border-color: #333;
+    transform: scale(1.1);
+  }
+[data-colorpicker] .red, .red[data-colorpicker] { background: #ef5350; }
+[data-colorpicker] .blue, .blue[data-colorpicker] { background: #42a5f5; }
+[data-colorpicker] .green, .green[data-colorpicker] { background: #66bb6a; }
+[data-colorpicker] .purple, .purple[data-colorpicker] { background: #ab47bc; }
+[data-colorpicker] .orange, .orange[data-colorpicker] { background: #ffa726; }
+
+/* Counter */
+[data-counter] .counter, .counter[data-counter] {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+[data-counter] .count, .count[data-counter] {
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+  }
+[data-counter] .buttons, .buttons[data-counter] {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+[data-counter] .buttons button, .buttons button[data-counter] {
+    padding: 10px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #4a90d9;
+    color: white;
+    transition: background 0.2s;
+  }
+[data-counter] .buttons button:hover, .buttons button:hover[data-counter] {
+    background: #357abd;
+  }
+
+/* LikeButton */
+[data-likebutton] .like-button, .like-button[data-likebutton] {
+    display: inline-block;
+  }
+[data-likebutton] .btn, .btn[data-likebutton] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+[data-likebutton] .btn:hover, .btn:hover[data-likebutton] {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+  }
+[data-likebutton] .icon, .icon[data-likebutton] {
+    font-size: 18px;
+  }
+[data-likebutton] .count, .count[data-likebutton] {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+  }
+
+</style>
+</head>
+  <body class="bg-white text-gray-900 min-h-screen">
+    <div>
+    <nav data-docsnavbar="" class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <a href="/" class="text-xl font-bold text-gray-800">gtml</a>
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <a href="/" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Home</a>
+          <a href="/docs" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Documentation</a>
+          <a href="/docs/components" class="inline-flex items-center px-1 pt-1 text-sm font-medium false">Components</a>
+          <a href="https://github.com/phillip-england/gtml" target="_blank" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    <div class="p-8 max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Interactive Components Demo</h1>
+      <p class="text-gray-600 mb-8">This page demonstrates the interactive components available in GTML. Click the buttons to see signals in action!</p>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Counter</h2>
+        <p class="text-gray-600 mb-4">A simple counter with increment/decrement buttons. The count is stored in a signal that automatically updates the DOM.</p>
+        <div class="p-6 border-2 border-gray-200 rounded-lg">
+          <div data-gtml-prop-initialValue='10' data-counter="" class='counter'>
+  <p class='count'><span data-gtml-signal-value='count'></span></p>
+  <div class='buttons'>
+    <button id='decrement'>-</button>
+    <button id='increment'>+</button>
+  </div>
+  
+</div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Like Button</h2>
+        <p class="text-gray-600 mb-4">A like button with animated state. Toggling changes both the icon and the count.</p>
+        <div class="p-6 border-2 border-gray-200 rounded-lg">
+          <div data-likebutton="" class='like-button'>
+  <button id='likeBtn' class='btn'>
+    <span class='icon' id='icon'>🤍</span>
+    <span class='count' id='countDisplay'>42</span>
+  </button>
+  
+</div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Color Picker</h2>
+        <p class="text-gray-600 mb-4">Select a color from the options below. The selected color is tracked in a signal.</p>
+        <div class="p-6 border-2 border-gray-200 rounded-lg">
+          <div data-colorpicker="" class='color-picker'>
+  <span class='label'>Choose a theme color</span>
+  <div class='colors'>
+    <button id='red' class='color-btn red'></button>
+    <button id='blue' class='color-btn blue selected'></button>
+    <button id='green' class='color-btn green'></button>
+    <button id='purple' class='color-btn purple'></button>
+    <button id='orange' class='color-btn orange'></button>
+  </div>
+  
+</div>
+        </div>
+      </section>
+
+      <footer class="border-t border-gray-200 pt-8 mt-16">
+        <div class="text-center text-gray-500">
+          <p>gtml - An opinionated static site generator</p>
+          <p class="mt-2">
+            <a href="https://github.com/phillip-england/gtml" target="_blank" class="text-blue-600 hover:text-blue-800">View on GitHub</a>
+          </p>
+        </div>
+      </footer>
+    </div>
+  </div>
+  </body>
+</html>
+
+<script>
+// GTML Signal Library
+class GtmlSignal {
+  constructor(value) {
+    this._value = value;
+    this._subscribers = [];
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set value(newValue) {
+    const oldValue = this._value;
+    this._value = newValue;
+    this._subscribers.forEach(callback => callback(newValue, oldValue));
+  }
+
+  subscribe(callback) {
+    this._subscribers.push(callback);
+    return () => {
+      this._subscribers = this._subscribers.filter(cb => cb !== callback);
+    };
+  }
+
+  update(fn) {
+    this.value = fn(this._value);
+  }
+}
+
+function createSignal(initialValue) {
+  return new GtmlSignal(initialValue);
+}
+
+const _gtmlSignalStore = new Map();
+
+function getSignal(name) {
+  if (!_gtmlSignalStore.has(name)) {
+    _gtmlSignalStore.set(name, new GtmlSignal(null));
+  }
+  return _gtmlSignalStore.get(name);
+}
+
+function setSignal(name, value) {
+  const signal = getSignal(name);
+  signal.value = value;
+}
+
+function initSignal(name, value) {
+  if (!_gtmlSignalStore.has(name)) {
+    _gtmlSignalStore.set(name, new GtmlSignal(value));
+  }
+}
+
+function _gtmlPropValue(propName) {
+  const el = document.currentScript.previousElementSibling;
+  if (el && el.hasAttribute('data-gtml-prop-' + propName)) {
+    const value = el.getAttribute('data-gtml-prop-' + propName);
+    if (value === 'null') return null;
+    if (value === 'undefined') return undefined;
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    if (!isNaN(value) && value !== '') return Number(value);
+    return value;
+  }
+  return null;
+}
+
+function _gtmlRenderSignalValues() {
+  document.querySelectorAll('[data-gtml-signal-value]').forEach(el => {
+    const name = el.getAttribute('data-gtml-signal-value');
+    const signal = getSignal(name);
+    const unsubscribe = signal.subscribe((newVal) => {
+      el.textContent = newVal;
+    });
+    el.textContent = signal.value;
+  });
+}
+
+</script>
+
+<script>
+
+  initSignal('count', null);
+  initSignal('initialValue', 10);
+
+(function() {setSignal('count', getSignal('initialValue').value)
+    document.querySelector('#decrement').onclick = function() {
+      setSignal('count', getSignal('count').value - 1)
+    };
+    document.querySelector('#increment').onclick = function() {
+      setSignal('count', getSignal('count').value + 1)
+    };
+  _gtmlRenderSignalValues();
+})();
+</script>
+
+<script>
+
+(function() {var liked = false;
+    document.querySelector('#likeBtn').onclick = function() {
+      liked = !liked;
+      var countDisplay = document.getElementById('countDisplay');
+      var currentCount = parseInt(countDisplay.textContent);
+      countDisplay.textContent = liked ? currentCount + 1 : currentCount - 1;
+      document.getElementById('icon').textContent = liked ? '❤️' : '🤍';
+    };
+  _gtmlRenderSignalValues();
+})();
+</script>
+
+<script>
+
+(function() {document.querySelector('#red').onclick = function() {
+      selectColor('red');
+    };
+    document.querySelector('#blue').onclick = function() {
+      selectColor('blue');
+    };
+    document.querySelector('#green').onclick = function() {
+      selectColor('green');
+    };
+    document.querySelector('#purple').onclick = function() {
+      selectColor('purple');
+    };
+    document.querySelector('#orange').onclick = function() {
+      selectColor('orange');
+    };
+    function selectColor(color) {
+      var buttons = document.querySelectorAll('.color-btn');
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('selected');
+      }
+      document.getElementById(color).classList.add('selected');
+    }
+  _gtmlRenderSignalValues();
+})();
+</script>

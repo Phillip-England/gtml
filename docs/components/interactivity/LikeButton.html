@@ -1,0 +1,45 @@
+<div props='initialCount int' class='like-button'>
+  <button id='likeBtn' class='btn'>
+    <span class='icon' id='icon'>🤍</span>
+    <span class='count' id='countDisplay'>{initialCount}</span>
+  </button>
+  <script type='gtml'>
+    var liked = false;
+    #likeBtn.onclick(function() {
+      liked = !liked;
+      var countDisplay = document.getElementById('countDisplay');
+      var currentCount = parseInt(countDisplay.textContent);
+      countDisplay.textContent = liked ? currentCount + 1 : currentCount - 1;
+      document.getElementById('icon').textContent = liked ? '❤️' : '🤍';
+    })
+  </script>
+</div>
+
+<style>
+  .like-button {
+    display: inline-block;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+  }
+  .icon {
+    font-size: 18px;
+  }
+  .count {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+  }
+</style>

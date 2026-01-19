@@ -26,8 +26,8 @@ p { color: red; }
 		t.Error("HTML should contain the div element")
 	}
 
-	if !strings.Contains(css, "p[data-test]") {
-		t.Errorf("CSS should be scoped, got: %s", css)
+	if !strings.Contains(css, "[data-test] p") {
+		t.Errorf("CSS should be scoped with descendant selector, got: %s", css)
 	}
 }
 

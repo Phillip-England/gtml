@@ -14,7 +14,7 @@ func TestExpression_Addition(t *testing.T) {
 	input := `<Math a={5} b={3} />`
 	expected := `<span>8</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -32,7 +32,7 @@ func TestExpression_Subtraction(t *testing.T) {
 	input := `<Math a={10} b={4} />`
 	expected := `<span>6</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -50,7 +50,7 @@ func TestExpression_Multiplication(t *testing.T) {
 	input := `<Math a={6} b={7} />`
 	expected := `<span>42</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -68,7 +68,7 @@ func TestExpression_Division(t *testing.T) {
 	input := `<Math a={20} b={4} />`
 	expected := `<span>5</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -86,7 +86,7 @@ func TestExpression_Modulo(t *testing.T) {
 	input := `<Math a={17} b={5} />`
 	expected := `<span>2</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -104,7 +104,7 @@ func TestExpression_StringConcatenation(t *testing.T) {
 	input := `<FullName first='John' last='Doe' />`
 	expected := `<p>John Doe</p>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -122,7 +122,7 @@ func TestExpression_NegativeInt(t *testing.T) {
 	input := `<Counter count={-5} />`
 	expected := `<span>Count: -5</span>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

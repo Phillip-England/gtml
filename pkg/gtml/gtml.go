@@ -33,6 +33,13 @@ var (
 	reForAttr      = regexp.MustCompile(`\s+for\s*=\s*['"]([^'"]+)['"]`)
 	reSuspenseAttr = regexp.MustCompile(`\s+suspense(\s|>|/)`)
 	reFallbackAttr = regexp.MustCompile(`\s+fallback(\s|>|/)`)
+
+	// Interactivity-related regex patterns
+	reGtmlScript   = regexp.MustCompile(`(?s)<script\s+type\s*=\s*['"]gtml['"]\s*>(.*?)</script>`)
+	reSignalAccess = regexp.MustCompile(`\$([a-zA-Z_][a-zA-Z0-9_]*)`)
+	reSignalSet    = regexp.MustCompile(`\$([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)`)
+	reElementSel   = regexp.MustCompile(`#([a-zA-Z_-][a-zA-Z0-9_-]*)(\*?)`)
+	reClassSel     = regexp.MustCompile(`\.([a-zA-Z_-][a-zA-Z0-9_-]*)(\*?)`)
 )
 
 type PropDef struct {
@@ -52,8 +59,9 @@ type Component struct {
 }
 
 type GlobalState struct {
-	Components map[string]*Component
-	CSSOutput  strings.Builder
+	Components      map[string]*Component
+	CSSOutput       strings.Builder
+	InteractivityJS strings.Builder
 }
 
 type Value struct {
@@ -99,7 +107,7 @@ func (v Value) String() string {
 	return ""
 }
 
-func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (string, error) {
+func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value, isTopLevel bool) (string, error) {
 	var err error
 	html, err = evaluateTernaries(html, scopeProps)
 	if err != nil {
@@ -122,7 +130,7 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 			return "", fmt.Errorf("error parsing attributes for %s: %v", tagName, err)
 		}
 
-		compiledChildren, err := CompileHTML(innerContent, state, scopeProps)
+		compiledChildren, err := CompileHTML(innerContent, state, scopeProps, false)
 		if err != nil {
 			return "", err
 		}
@@ -130,6 +138,26 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 		slotsMap := extractSlots(compiledChildren)
 
 		renderedComp := compDef.Template
+
+		// Extract prop signals from gtml script BEFORE processing
+		propSignals := extractPropSignals(renderedComp)
+
+		// Process gtml scripts and mark signal expressions BEFORE expression evaluation
+		renderedComp, gtmlScript, err := ProcessGtmlScripts(renderedComp, props)
+		if err != nil {
+			return "", fmt.Errorf("error processing gtml scripts in %s: %v", tagName, err)
+		}
+		if gtmlScript != "" {
+			state.InteractivityJS.WriteString(gtmlScript)
+		}
+
+		// Mark signal expressions in the template for runtime rendering
+		// This is done BEFORE expression evaluation
+		signalNames := extractSignalNames(gtmlScript)
+		for sigName := range signalNames {
+			markerRe := regexp.MustCompile(`\{` + sigName + `\}`)
+			renderedComp = markerRe.ReplaceAllString(renderedComp, fmt.Sprintf("{gtml-signal-%s}", sigName))
+		}
 
 		// Protect fetch expressions before evaluation
 		renderedComp = protectFetchExpressions(renderedComp)
@@ -139,8 +167,44 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 			return "", fmt.Errorf("error evaluating expressions in %s: %v", tagName, err)
 		}
 
-		// Restore fetch expressions after evaluation
+		// Replace the signal markers with spans for runtime rendering
+		for sigName := range signalNames {
+			markerRe := regexp.MustCompile(`\{gtml-signal-` + sigName + `\}`)
+			renderedComp = markerRe.ReplaceAllString(renderedComp, fmt.Sprintf("<span data-gtml-signal-value='%s'></span>", sigName))
+		}
+
+		renderedComp, err = EvaluateExpressions(renderedComp, props)
+		if err != nil {
+			return "", fmt.Errorf("error evaluating expressions in %s: %v", tagName, err)
+		}
+
+		// Restore fetch expressions after all evaluations are done
 		renderedComp = restoreFetchExpressions(renderedComp)
+
+		// Add data attributes for prop signals
+		for propName := range propSignals {
+			attrName := fmt.Sprintf("data-gtml-prop-%s", propName)
+			if propValue, ok := props[propName]; ok {
+				serializedValue := propValue.String()
+				// Add the attribute to the first element of the component
+				if strings.HasPrefix(strings.TrimSpace(renderedComp), "<") {
+					firstSpace := strings.IndexAny(renderedComp, " >")
+					if firstSpace != -1 {
+						if renderedComp[firstSpace] == ' ' {
+							// Has attributes, insert after first space
+							insertPos := firstSpace + 1
+							for insertPos < len(renderedComp) && renderedComp[insertPos] == ' ' {
+								insertPos++
+							}
+							renderedComp = renderedComp[:insertPos] + fmt.Sprintf("%s='%s' ", attrName, serializedValue) + renderedComp[insertPos:]
+						} else if renderedComp[firstSpace] == '>' {
+							// No attributes, insert before >
+							renderedComp = renderedComp[:firstSpace] + fmt.Sprintf(" %s='%s'", attrName, serializedValue) + renderedComp[firstSpace:]
+						}
+					}
+				}
+			}
+		}
 
 		renderedComp = reSlotPlaceholder.ReplaceAllStringFunc(renderedComp, func(match string) string {
 			subMatch := reSlotPlaceholder.FindStringSubmatch(match)
@@ -154,7 +218,7 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 			return ""
 		})
 
-		finalRendered, err := CompileHTML(renderedComp, state, props)
+		finalRendered, err := CompileHTML(renderedComp, state, props, false)
 		if err != nil {
 			return "", err
 		}
@@ -172,6 +236,11 @@ func CompileHTML(html string, state *GlobalState, scopeProps map[string]Value) (
 	html, err = EvaluateExpressions(html, scopeProps)
 	if err != nil {
 		return "", err
+	}
+
+	// Append interactivity scripts to the HTML only at the top level
+	if isTopLevel && state.InteractivityJS.Len() > 0 {
+		html = html + "\n<script>\n" + SignalLibrary + "\n</script>\n" + state.InteractivityJS.String()
 	}
 
 	return html, nil
@@ -226,6 +295,12 @@ func EvaluateExpressions(html string, props map[string]Value) (string, error) {
 
 		// Skip expressions inside script tags (they're meant for client-side JavaScript)
 		if isInsideScriptTag(result, fullStart) {
+			offset = fullEnd
+			continue
+		}
+
+		// Skip expressions that are marked as signal placeholders
+		if strings.HasPrefix(expr, "gtml-signal-") {
 			offset = fullEnd
 			continue
 		}
@@ -996,6 +1071,10 @@ func ProcessComponentStyles(raw string, scopeID string) (string, string, error) 
 		var newSels []string
 		for _, s := range selList {
 			s = strings.TrimSpace(s)
+			// Output both selector forms:
+			// 1. [scope] .class - for descendants of the scoped root
+			// 2. [scope].class - for when the class is on the scoped root itself
+			newSels = append(newSels, fmt.Sprintf("[%s] %s", scopeID, s))
 			newSels = append(newSels, fmt.Sprintf("%s[%s]", s, scopeID))
 		}
 		scopedCSS.WriteString(strings.Join(newSels, ", ") + " {" + body + "}\n")
@@ -1764,9 +1843,16 @@ func CompileProject(basePath string, opts CompileOptions) error {
 			return err
 		}
 
-		compiledHTML, err := CompileHTML(string(contentBytes), state, map[string]Value{})
+		compiledHTML, err := CompileHTML(string(contentBytes), state, map[string]Value{}, true)
 		if err != nil {
 			return fmt.Errorf("error compiling %s: %v", path, err)
+		}
+
+		// Inject inline CSS into the head for reliable styling
+		cssContent := state.CSSOutput.String()
+		if cssContent != "" && strings.Contains(compiledHTML, "</head>") {
+			inlineStyle := fmt.Sprintf("<style>\n%s</style>\n</head>", cssContent)
+			compiledHTML = strings.Replace(compiledHTML, "</head>", inlineStyle, 1)
 		}
 
 		outPath := filepath.Join(distDir, relPath)
@@ -1786,14 +1872,16 @@ func CompileProject(basePath string, opts CompileOptions) error {
 		return err
 	}
 
-	cssFile := filepath.Join(staticDistDir, "styles.css")
-	if err := os.WriteFile(cssFile, []byte(state.CSSOutput.String()), 0644); err != nil {
-		return err
-	}
-
+	// Copy static files first
 	srcStatic := filepath.Join(basePath, opts.StaticDir)
 	if _, err := os.Stat(srcStatic); err == nil {
 		copyDir(srcStatic, staticDistDir)
+	}
+
+	// Write generated CSS last so it overwrites any placeholder from source static
+	cssFile := filepath.Join(staticDistDir, "styles.css")
+	if err := os.WriteFile(cssFile, []byte(state.CSSOutput.String()), 0644); err != nil {
+		return err
 	}
 
 	return nil
@@ -1859,4 +1947,342 @@ func WatchProject(basePath string, opts CompileOptions) {
 			lastMod = time.Now()
 		}
 	}
+}
+
+const SignalLibrary = `// GTML Signal Library
+class GtmlSignal {
+  constructor(value) {
+    this._value = value;
+    this._subscribers = [];
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set value(newValue) {
+    const oldValue = this._value;
+    this._value = newValue;
+    this._subscribers.forEach(callback => callback(newValue, oldValue));
+  }
+
+  subscribe(callback) {
+    this._subscribers.push(callback);
+    return () => {
+      this._subscribers = this._subscribers.filter(cb => cb !== callback);
+    };
+  }
+
+  update(fn) {
+    this.value = fn(this._value);
+  }
+}
+
+function createSignal(initialValue) {
+  return new GtmlSignal(initialValue);
+}
+
+const _gtmlSignalStore = new Map();
+
+function getSignal(name) {
+  if (!_gtmlSignalStore.has(name)) {
+    _gtmlSignalStore.set(name, new GtmlSignal(null));
+  }
+  return _gtmlSignalStore.get(name);
+}
+
+function setSignal(name, value) {
+  const signal = getSignal(name);
+  signal.value = value;
+}
+
+function initSignal(name, value) {
+  if (!_gtmlSignalStore.has(name)) {
+    _gtmlSignalStore.set(name, new GtmlSignal(value));
+  }
+}
+
+function _gtmlPropValue(propName) {
+  const el = document.currentScript.previousElementSibling;
+  if (el && el.hasAttribute('data-gtml-prop-' + propName)) {
+    const value = el.getAttribute('data-gtml-prop-' + propName);
+    if (value === 'null') return null;
+    if (value === 'undefined') return undefined;
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    if (!isNaN(value) && value !== '') return Number(value);
+    return value;
+  }
+  return null;
+}
+
+function _gtmlRenderSignalValues() {
+  document.querySelectorAll('[data-gtml-signal-value]').forEach(el => {
+    const name = el.getAttribute('data-gtml-signal-value');
+    const signal = getSignal(name);
+    const unsubscribe = signal.subscribe((newVal) => {
+      el.textContent = newVal;
+    });
+    el.textContent = signal.value;
+  });
+}
+`
+
+func ProcessGtmlScripts(html string, props map[string]Value) (string, string, error) {
+	matches := reGtmlScript.FindAllStringSubmatchIndex(html, -1)
+
+	if len(matches) == 0 {
+		return html, "", nil
+	}
+
+	signalRegistrations := make(map[string]bool)
+	var compiledScripts strings.Builder
+	var declaredSignals []string
+	propSignals := make(map[string]bool)
+
+	for _, match := range matches {
+		scriptStart := match[2]
+		scriptEnd := match[3]
+		gtmlCode := html[scriptStart:scriptEnd]
+
+		declaredSignals = extractDeclaredSignals(gtmlCode)
+		compiledScript, signals := CompileGtmlScript(gtmlCode)
+
+		for sigName := range signals {
+			if !signalRegistrations[sigName] {
+				signalRegistrations[sigName] = true
+			}
+		}
+
+		for _, sigName := range declaredSignals {
+			propSignals[sigName] = false
+		}
+
+		currentPropSignals := extractPropSignals(gtmlCode)
+		for sigName := range currentPropSignals {
+			if !propSignals[sigName] {
+				propSignals[sigName] = true
+			}
+		}
+
+		compiledScripts.WriteString(compiledScript)
+	}
+
+	signalInitCode := ""
+	for sigName := range signalRegistrations {
+		if propSignals[sigName] {
+			// Use actual prop value if available, otherwise null
+			if propVal, ok := props[sigName]; ok {
+				// Format value appropriately for JavaScript
+				var jsValue string
+				switch propVal.Type {
+				case PropTypeString:
+					jsValue = fmt.Sprintf("'%s'", propVal.StrVal)
+				case PropTypeInt:
+					jsValue = fmt.Sprintf("%d", propVal.IntVal)
+				case PropTypeBoolean:
+					if propVal.BoolVal {
+						jsValue = "true"
+					} else {
+						jsValue = "false"
+					}
+				default:
+					jsValue = "null"
+				}
+				signalInitCode += fmt.Sprintf("  initSignal('%s', %s);\n", sigName, jsValue)
+			} else {
+				signalInitCode += fmt.Sprintf("  initSignal('%s', null);\n", sigName)
+			}
+		} else {
+			signalInitCode += fmt.Sprintf("  initSignal('%s', null);\n", sigName)
+		}
+	}
+
+	if signalInitCode != "" {
+		signalInitCode = "\n" + signalInitCode
+	}
+
+	headerScript := fmt.Sprintf("\n<script>\n%s\n(function() {%s\n  _gtmlRenderSignalValues();\n})();\n</script>\n",
+		signalInitCode, compiledScripts.String())
+
+	result := reGtmlScript.ReplaceAllString(html, "")
+
+	for sigName := range signalRegistrations {
+		signalRe := regexp.MustCompile(`\{` + sigName + `\}`)
+		result = signalRe.ReplaceAllString(result, fmt.Sprintf("<span data-gtml-signal-value='%s'></span>", sigName))
+	}
+
+	return result, headerScript, nil
+}
+
+func CompileGtmlScript(gtmlCode string) (string, map[string]bool) {
+	signals := make(map[string]bool)
+
+	code := gtmlCode
+
+	code = convertElementSelectors(code, signals)
+	code = convertEventBindings(code)
+	code = convertSignalOperations(code, signals)
+	code = convertSignalAccess(code, signals)
+
+	return strings.TrimSpace(code), signals
+}
+
+// convertEventBindings converts .onclick(function() {...}) to .onclick = function() {...};
+func convertEventBindings(code string) string {
+	// Pattern to match event bindings like .onclick(function() or .onclick(function ()
+	reEventBinding := regexp.MustCompile(`\.(on[a-z]+)\(function\s*\(\s*\)\s*\{`)
+	code = reEventBinding.ReplaceAllString(code, ".$1 = function() {")
+
+	// Convert closing }); to }; for event bindings (with semicolon)
+	reClosingParenSemi := regexp.MustCompile(`\}\);`)
+	code = reClosingParenSemi.ReplaceAllString(code, "};")
+
+	// Convert closing }) to }; for event bindings (without semicolon)
+	// This handles the closing parenthesis from the original .onclick(function(){}) syntax
+	reClosingParen := regexp.MustCompile(`\}\)(\s*)$`)
+	code = reClosingParen.ReplaceAllString(code, "};$1")
+
+	// Handle }) followed by newlines and more code
+	reClosingParenMidCode := regexp.MustCompile(`\}\)(\s*\n)`)
+	code = reClosingParenMidCode.ReplaceAllString(code, "};$1")
+
+	return code
+}
+
+func convertElementSelectors(code string, signals map[string]bool) string {
+	reElementSel = regexp.MustCompile(`(^|[(\s;,])#([a-zA-Z_-][a-zA-Z0-9_-]*)(\*?)($|[)\s.,;])`)
+	code = reElementSel.ReplaceAllStringFunc(code, func(match string) string {
+		submatch := reElementSel.FindStringSubmatch(match)
+		if len(submatch) < 5 {
+			return match
+		}
+		prefix := submatch[1]
+		id := submatch[2]
+		isAll := submatch[3] == "*"
+		suffix := submatch[4]
+		selector := fmt.Sprintf("document.querySelector%s('#%s')", map[bool]string{true: "All", false: ""}[isAll], id)
+		return prefix + selector + suffix
+	})
+
+	reClassSel = regexp.MustCompile(`(^|[(\s;,])\.([a-zA-Z_-][a-zA-Z0-9_-]*)(\*?)($|[)\s.,;])`)
+	code = reClassSel.ReplaceAllStringFunc(code, func(match string) string {
+		submatch := reClassSel.FindStringSubmatch(match)
+		if len(submatch) < 5 {
+			return match
+		}
+		prefix := submatch[1]
+		class := submatch[2]
+		isAll := submatch[3] == "*"
+		suffix := submatch[4]
+		selector := fmt.Sprintf("document.querySelector%s('.%s')", map[bool]string{true: "All", false: ""}[isAll], class)
+		return prefix + selector + suffix
+	})
+
+	return code
+}
+
+func convertSignalOperations(code string, signals map[string]bool) string {
+	code = reSignalSet.ReplaceAllStringFunc(code, func(match string) string {
+		submatch := reSignalSet.FindStringSubmatch(match)
+		if len(submatch) < 3 {
+			return match
+		}
+		sigName := submatch[1]
+		rightSide := strings.TrimSpace(submatch[2])
+		signals[sigName] = true
+
+		compiledRight := compileSignalExpression(rightSide, signals)
+
+		return fmt.Sprintf("setSignal('%s', %s)", sigName, compiledRight)
+	})
+
+	return code
+}
+
+func compileSignalExpression(expr string, signals map[string]bool) string {
+	processed := expr
+
+	reCompoundOp := regexp.MustCompile(`\$([a-zA-Z_][a-zA-Z0-9_]*)\s*([+\-*/%]|==|!=|<=|>=|<|>)\s*(.+)`)
+	processed = reCompoundOp.ReplaceAllStringFunc(processed, func(match string) string {
+		submatch := reCompoundOp.FindStringSubmatch(match)
+		if len(submatch) < 4 {
+			return match
+		}
+		sigName := submatch[1]
+		op := submatch[2]
+		rightSide := strings.TrimSpace(submatch[3])
+		signals[sigName] = true
+
+		compiledRight := compileSignalExpression(rightSide, signals)
+
+		return fmt.Sprintf("(getSignal('%s').value %s %s)", sigName, op, compiledRight)
+	})
+
+	processed = reSignalAccess.ReplaceAllStringFunc(processed, func(match string) string {
+		submatch := reSignalAccess.FindStringSubmatch(match)
+		if len(submatch) < 2 {
+			return match
+		}
+		sigName := submatch[1]
+		signals[sigName] = true
+		return fmt.Sprintf("getSignal('%s').value", sigName)
+	})
+
+	return processed
+}
+
+func convertSignalAccess(code string, signals map[string]bool) string {
+	code = reSignalAccess.ReplaceAllStringFunc(code, func(match string) string {
+		submatch := reSignalAccess.FindStringSubmatch(match)
+		if len(submatch) < 2 {
+			return match
+		}
+		sigName := submatch[1]
+		signals[sigName] = true
+		return fmt.Sprintf("getSignal('%s').value", sigName)
+	})
+	return code
+}
+
+func extractSignalNames(script string) map[string]bool {
+	signals := make(map[string]bool)
+	reSignalUsage := regexp.MustCompile(`setSignal\('([a-zA-Z_][a-zA-Z0-9_]*)'`)
+	matches := reSignalUsage.FindAllStringSubmatchIndex(script, -1)
+	for _, match := range matches {
+		if len(match) >= 4 {
+			sigName := script[match[2]:match[3]]
+			signals[sigName] = true
+		}
+	}
+	return signals
+}
+
+func extractPropSignals(script string) map[string]bool {
+	propSignals := make(map[string]bool)
+	signals := extractSignalNames(script)
+	reSignalAccess := regexp.MustCompile(`\$([a-zA-Z_][a-zA-Z0-9_]*)`)
+	matches := reSignalAccess.FindAllStringSubmatch(script, -1)
+	for _, match := range matches {
+		if len(match) >= 2 {
+			sigName := match[1]
+			if !signals[sigName] && sigName != "this" {
+				propSignals[sigName] = true
+			}
+		}
+	}
+	return propSignals
+}
+
+func extractDeclaredSignals(script string) []string {
+	var declared []string
+	re := regexp.MustCompile(`\$([a-zA-Z_][a-zA-Z0-9_]*)\s*=`)
+	matches := re.FindAllStringSubmatch(script, -1)
+	for _, match := range matches {
+		if len(match) >= 2 {
+			sigName := match[1]
+			declared = append(declared, sigName)
+		}
+	}
+	return declared
 }

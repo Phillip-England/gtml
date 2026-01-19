@@ -4,8 +4,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avatar - gtml</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!--<link rel="stylesheet" href="/static/styles.css">-->
-  </head>
+    <link rel="stylesheet" href="/static/styles.css">
+  <style>
+/* ColorPicker */
+[data-colorpicker] .color-picker, .color-picker[data-colorpicker] {
+    padding: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+[data-colorpicker] .label, .label[data-colorpicker] {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+  }
+[data-colorpicker] .colors, .colors[data-colorpicker] {
+    display: flex;
+    gap: 10px;
+  }
+[data-colorpicker] .color-btn, .color-btn[data-colorpicker] {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+[data-colorpicker] .color-btn:hover, .color-btn:hover[data-colorpicker] {
+    transform: scale(1.1);
+  }
+[data-colorpicker] .color-btn.selected, .color-btn.selected[data-colorpicker] {
+    border-color: #333;
+    transform: scale(1.1);
+  }
+[data-colorpicker] .red, .red[data-colorpicker] { background: #ef5350; }
+[data-colorpicker] .blue, .blue[data-colorpicker] { background: #42a5f5; }
+[data-colorpicker] .green, .green[data-colorpicker] { background: #66bb6a; }
+[data-colorpicker] .purple, .purple[data-colorpicker] { background: #ab47bc; }
+[data-colorpicker] .orange, .orange[data-colorpicker] { background: #ffa726; }
+
+/* Counter */
+[data-counter] .counter, .counter[data-counter] {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+[data-counter] .count, .count[data-counter] {
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+  }
+[data-counter] .buttons, .buttons[data-counter] {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+[data-counter] .buttons button, .buttons button[data-counter] {
+    padding: 10px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #4a90d9;
+    color: white;
+    transition: background 0.2s;
+  }
+[data-counter] .buttons button:hover, .buttons button:hover[data-counter] {
+    background: #357abd;
+  }
+
+/* LikeButton */
+[data-likebutton] .like-button, .like-button[data-likebutton] {
+    display: inline-block;
+  }
+[data-likebutton] .btn, .btn[data-likebutton] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+[data-likebutton] .btn:hover, .btn:hover[data-likebutton] {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+  }
+[data-likebutton] .icon, .icon[data-likebutton] {
+    font-size: 18px;
+  }
+[data-likebutton] .count, .count[data-likebutton] {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+  }
+
+</style>
+</head>
   <body class="bg-white text-gray-900 min-h-screen">
     <div>
     <nav data-docsnavbar="" class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">

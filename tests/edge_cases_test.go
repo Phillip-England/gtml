@@ -14,7 +14,7 @@ func TestEdge_SelfClosingWithSpaces(t *testing.T) {
 	input := `<Icon   />`
 	expected := `<svg></svg>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -32,7 +32,7 @@ func TestEdge_ComponentWithNoProps(t *testing.T) {
 	input := `<Divider />`
 	expected := `<hr />`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -52,7 +52,7 @@ func TestEdge_DeeplyNestedComponents(t *testing.T) {
 	input := `<Level1 input='deep value' />`
 	expected := `<div><p><span>deep value</span></p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -70,7 +70,7 @@ func TestEdge_MultipleComponentsInRoute(t *testing.T) {
 	input := `<div><Para text='First' /><Para text='Second' /></div>`
 	expected := `<div><p>First</p><p>Second</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -88,7 +88,7 @@ func TestEdge_ComponentWithTextAround(t *testing.T) {
 	input := `<p>Hello <Bold text='World' /> and goodbye</p>`
 	expected := `<p>Hello <strong>World</strong> and goodbye</p>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

@@ -27,6 +27,16 @@
             </ul>
           </div>
           <div>
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Interactivity</h3>
+            <ul class="mt-2 space-y-1">
+              <li><a href="#gtml-scripts" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">GTML Scripts</a></li>
+              <li><a href="#signals" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Signals</a></li>
+              <li><a href="#element-selectors" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Element Selectors</a></li>
+              <li><a href="#event-handlers" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Event Handlers</a></li>
+              <li><a href="#signal-rendering" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">Signal Rendering</a></li>
+            </ul>
+          </div>
+          <div>
             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">CLI</h3>
             <ul class="mt-2 space-y-1">
               <li><a href="#cli-init" class="block px-2 py-1 text-sm text-gray-700 hover:bg-gray-200 rounded">gtml init</a></li>
@@ -308,6 +318,168 @@
           </ul>
         </section>
 
+        <!-- Interactivity -->
+        <section id="gtml-scripts" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">GTML Scripts</h2>
+          <p class="text-gray-600 mb-4">GTML provides a simple way to add client-side interactivity to your components using <code class="bg-gray-100 px-1 rounded">&lt;script type='gtml'&gt;</code> blocks. These scripts are compiled into vanilla JavaScript.</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div class="counter"&gt;
+  &lt;p&gt;Count: &lt;span id="count"&gt;0&lt;/span&gt;&lt;/p&gt;
+  &lt;button id="increment"&gt;+&lt;/button&gt;
+
+  &lt;script type='gtml'&gt;
+    var count = 0;
+    #increment.onclick(function() &#123;
+      count++;
+      document.getElementById('count').textContent = count;
+    &#125;)
+  &lt;/script&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <div class="p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+            <p class="text-blue-700"><strong>Note:</strong> GTML scripts are compiled to standard JavaScript. The special syntax (signals, selectors) is transformed at build time.</p>
+          </div>
+        </section>
+
+        <section id="signals" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Signals</h2>
+          <p class="text-gray-600 mb-4">Signals are reactive variables that automatically update the DOM when changed. Create a signal using <code class="bg-gray-100 px-1 rounded">$name = value</code> syntax.</p>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">Signal Syntax</h3>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">// Inside a &lt;script type='gtml'&gt; block:
+
+// Create a signal with initial value
+$count = 0
+
+// Create a signal from a prop value
+$count = $initialValue
+
+// Update a signal
+setSignal('count', getSignal('count').value + 1)
+
+// Read a signal value
+var currentValue = getSignal('count').value</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">Signal Functions</h3>
+          <ul class="list-disc list-inside text-gray-600 mb-4 space-y-2">
+            <li><code class="bg-gray-100 px-1 rounded">$name = value</code> - Create/set a signal (compiles to <code class="bg-gray-100 px-1 rounded">setSignal('name', value)</code>)</li>
+            <li><code class="bg-gray-100 px-1 rounded">$name</code> - Access a signal value (compiles to <code class="bg-gray-100 px-1 rounded">getSignal('name').value</code>)</li>
+            <li><code class="bg-gray-100 px-1 rounded">getSignal('name')</code> - Get the signal object</li>
+            <li><code class="bg-gray-100 px-1 rounded">setSignal('name', value)</code> - Set a signal value</li>
+          </ul>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Using Props as Initial Values</h3>
+          <p class="text-gray-600 mb-4">Props can be used as initial signal values. When you use <code class="bg-gray-100 px-1 rounded">$propName</code> on the right side of an assignment, the prop value is used:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">// If component has props='startValue int'
+$counter = $startValue  // Signal initialized from prop</code></pre>
+          </div>
+        </section>
+
+        <section id="element-selectors" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Element Selectors</h2>
+          <p class="text-gray-600 mb-4">GTML provides shorthand selectors for querying DOM elements:</p>
+
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">ID Selector</h3>
+              <p class="text-gray-600 mb-2">Use <code class="bg-gray-100 px-1 rounded">#id</code> to select by ID:</p>
+              <div class="bg-gray-900 rounded-lg overflow-hidden">
+                <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">// GTML syntax
+#myButton.onclick(function() &#123; ... &#125;)
+
+// Compiles to
+document.querySelector('#myButton').onclick = function() &#123; ... &#125;</code></pre>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">Class Selector</h3>
+              <p class="text-gray-600 mb-2">Use <code class="bg-gray-100 px-1 rounded">.class</code> to select by class:</p>
+              <div class="bg-gray-900 rounded-lg overflow-hidden">
+                <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">// GTML syntax
+.submit-btn.onclick(function() &#123; ... &#125;)
+
+// Compiles to
+document.querySelector('.submit-btn').onclick = function() &#123; ... &#125;</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="event-handlers" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Event Handlers</h2>
+          <p class="text-gray-600 mb-4">Attach event handlers using the <code class="bg-gray-100 px-1 rounded">.onevent(function() &#123; &#125;)</code> syntax:</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;script type='gtml'&gt;
+  // Click handler
+  #myButton.onclick(function() &#123;
+    alert('Button clicked!');
+  &#125;)
+
+  // Other events work too
+  #myInput.onchange(function() &#123;
+    console.log('Input changed');
+  &#125;)
+
+  #myDiv.onmouseover(function() &#123;
+    this.style.background = 'blue';
+  &#125;)
+&lt;/script&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600">The syntax <code class="bg-gray-100 px-1 rounded">.onclick(function() &#123;&#125;)</code> compiles to <code class="bg-gray-100 px-1 rounded">.onclick = function() &#123;&#125;</code>.</p>
+        </section>
+
+        <section id="signal-rendering" class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Signal Rendering</h2>
+          <p class="text-gray-600 mb-4">Signals automatically render in the DOM. Use curly brace expression syntax with the signal name in your HTML to display signal values.</p>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">How It Works</h3>
+          <p class="text-gray-600 mb-4">When you reference a signal in your HTML template using curly braces (just like prop expressions), it gets compiled to a <code class="bg-gray-100 px-1 rounded">&lt;span&gt;</code> element with a <code class="bg-gray-100 px-1 rounded">data-gtml-signal-value</code> attribute that automatically updates when the signal changes.</p>
+
+          <p class="text-gray-600 mb-4">The span's content updates automatically whenever you call <code class="bg-gray-100 px-1 rounded">setSignal()</code>.</p>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 mt-6">Complete Example</h3>
+          <p class="text-gray-600 mb-4">Here's the structure of an interactive counter component:</p>
+
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;div props='initialValue int' class='counter'&gt;
+  &lt;p class='value'&gt;
+    &lt;span data-gtml-signal-value='myCount'&gt;&lt;/span&gt;
+  &lt;/p&gt;
+  &lt;div class='buttons'&gt;
+    &lt;button id='decrement'&gt;-&lt;/button&gt;
+    &lt;button id='increment'&gt;+&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;script type='gtml'&gt;
+    $myCount = $initialValue
+    #decrement.onclick(function() &#123;
+      setSignal('myCount', getSignal('myCount').value - 1)
+    &#125;)
+    #increment.onclick(function() &#123;
+      setSignal('myCount', getSignal('myCount').value + 1)
+    &#125;)
+  &lt;/script&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <p class="text-gray-600 mb-4">Use the component in a route:</p>
+          <div class="bg-gray-900 rounded-lg overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-100 font-mono">&lt;Counter initialValue='10' /&gt;</code></pre>
+          </div>
+
+          <div class="p-4 bg-green-50 border-l-4 border-green-500 rounded">
+            <p class="text-green-700"><strong>Try it:</strong> See live examples of interactive components on the <a href="/interactivity" class="underline">Interactive Components Demo</a> page.</p>
+          </div>
+        </section>
+
         <!-- CLI -->
         <section id="cli-init" class="mb-16">
           <h2 class="text-2xl font-bold text-gray-900 mb-4">gtml init</h2>
@@ -387,6 +559,10 @@
             <div class="p-4 bg-gray-50 rounded-lg">
               <h3 class="font-semibold text-gray-900 mb-2">Utility</h3>
               <p class="text-sm text-gray-600">Divider, LoadingSpinner, LoadingSkeleton, StepIndicator, CodeBlock</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg md:col-span-2">
+              <h3 class="font-semibold text-gray-900 mb-2">Interactivity</h3>
+              <p class="text-sm text-gray-600">Counter, ToggleSwitch, LikeButton, Modal, AccordionItem, ColorPicker, TabSwitcher, TabItem, StepIndicator, StepItem</p>
             </div>
           </div>
         </section>

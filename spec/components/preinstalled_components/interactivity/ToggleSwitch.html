@@ -1,0 +1,55 @@
+<div props='label string' class='toggle'>
+  <span class='label'>{$label}</span>
+  <button id='toggleBtn' class='toggle-btn {$isOn ? "active" : ""}'>
+    <span class='toggle-thumb'></span>
+  </button>
+  <script type='gtml'>
+    $isOn = false
+    #toggleBtn.onclick(() => {
+      $isOn = !$isOn
+    })
+  </script>
+</div>
+
+<style>
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .label {
+    font-size: 16px;
+    color: #333;
+  }
+  .toggle-btn {
+    width: 52px;
+    height: 28px;
+    border-radius: 14px;
+    background: #ccc;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .toggle-btn.active {
+    background: #4caf50;
+  }
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    background: white;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .toggle-btn.active .toggle-thumb {
+    transform: translateX(24px);
+  }
+</style>

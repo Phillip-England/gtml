@@ -1,0 +1,57 @@
+<div props='label string' class='color-picker'>
+  <span class='label'>{label}</span>
+  <div class='colors'>
+    <button id='red' class='color-btn red {$currentColor == "red" ? "selected" : ""}'></button>
+    <button id='blue' class='color-btn blue {$currentColor == "blue" ? "selected" : ""}'></button>
+    <button id='green' class='color-btn green {$currentColor == "green" ? "selected" : ""}'></button>
+    <button id='purple' class='color-btn purple {$currentColor == "purple" ? "selected" : ""}'></button>
+    <button id='orange' class='color-btn orange {$currentColor == "orange" ? "selected" : ""}'></button>
+  </div>
+  <script type='gtml'>
+    $currentColor = "blue"
+    #red.onclick(() => { $currentColor = "red" })
+    #blue.onclick(() => { $currentColor = "blue" })
+    #green.onclick(() => { $currentColor = "green" })
+    #purple.onclick(() => { $currentColor = "purple" })
+    #orange.onclick(() => { $currentColor = "orange" })
+  </script>
+</div>
+
+<style>
+  .color-picker {
+    padding: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+  }
+  .colors {
+    display: flex;
+    gap: 10px;
+  }
+  .color-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .color-btn:hover {
+    transform: scale(1.1);
+  }
+  .color-btn.selected {
+    border-color: #333;
+    transform: scale(1.1);
+  }
+  .red { background: #ef5350; }
+  .blue { background: #42a5f5; }
+  .green { background: #66bb6a; }
+  .purple { background: #ab47bc; }
+  .orange { background: #ffa726; }
+</style>

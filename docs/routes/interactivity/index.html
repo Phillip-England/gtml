@@ -1,0 +1,43 @@
+<DocsLayout title="Interactive Components Demo - GTML">
+  <slot name='content' tag='div'>
+    <DocsNavbar currentPage="interactivity" />
+
+    <div class="p-8 max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Interactive Components Demo</h1>
+      <p class="text-gray-600 mb-8">This page demonstrates the interactive components available in GTML. Click the buttons to see signals in action!</p>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Counter</h2>
+        <p class="text-gray-600 mb-4">A simple counter with increment/decrement buttons. The count is stored in a signal that automatically updates the DOM.</p>
+        <div class="p-6 border-2 border-gray-200 rounded-lg">
+          <Counter initialValue={10} />
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Like Button</h2>
+        <p class="text-gray-600 mb-4">A like button with animated state. Toggling changes both the icon and the count.</p>
+        <div class="p-6 border-2 border-gray-200 rounded-lg">
+          <LikeButton initialCount={42} />
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Color Picker</h2>
+        <p class="text-gray-600 mb-4">Select a color from the options below. The selected color is tracked in a signal.</p>
+        <div class="p-6 border-2 border-gray-200 rounded-lg">
+          <ColorPicker label="Choose a theme color" />
+        </div>
+      </section>
+
+      <footer class="border-t border-gray-200 pt-8 mt-16">
+        <div class="text-center text-gray-500">
+          <p>gtml - An opinionated static site generator</p>
+          <p class="mt-2">
+            <a href="https://github.com/phillip-england/gtml" target="_blank" class="text-blue-600 hover:text-blue-800">View on GitHub</a>
+          </p>
+        </div>
+      </footer>
+    </div>
+  </slot>
+</DocsLayout>

@@ -14,7 +14,7 @@ func TestTernary_Basic(t *testing.T) {
 	input := `<ShowIfActive active={true} />`
 	expected := `<div><p>Active</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -26,7 +26,7 @@ func TestTernary_Basic(t *testing.T) {
 	input2 := `<ShowIfActive active={false} />`
 	expected2 := `<div><p>Inactive</p></div>`
 
-	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{})
+	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -44,7 +44,7 @@ func TestTernary_NumericComparison(t *testing.T) {
 	input := `<AgeCheck age={21} />`
 	expected := `<div><p>Adult</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -56,7 +56,7 @@ func TestTernary_NumericComparison(t *testing.T) {
 	input2 := `<AgeCheck age={15} />`
 	expected2 := `<div><p>Minor</p></div>`
 
-	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{})
+	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -74,7 +74,7 @@ func TestTernary_StringComparison(t *testing.T) {
 	input := `<ColorCheck color='blue' />`
 	expected := `<div><p>blue</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -86,7 +86,7 @@ func TestTernary_StringComparison(t *testing.T) {
 	input2 := `<ColorCheck color='red' />`
 	expected2 := `<div><p>not blue</p></div>`
 
-	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{})
+	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -104,7 +104,7 @@ func TestTernary_LogicalAnd(t *testing.T) {
 	input := `<AccessCheck role='admin' active={true} />`
 	expected := `<div><p>Full Access</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -116,7 +116,7 @@ func TestTernary_LogicalAnd(t *testing.T) {
 	input2 := `<AccessCheck role='admin' active={false} />`
 	expected2 := `<div><p>Limited Access</p></div>`
 
-	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{})
+	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -134,7 +134,7 @@ func TestTernary_LogicalOr(t *testing.T) {
 	input := `<PriorityUser role='admin' />`
 	expected := `<div><p>Priority User</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -146,7 +146,7 @@ func TestTernary_LogicalOr(t *testing.T) {
 	input2 := `<PriorityUser role='guest' />`
 	expected2 := `<div><p>Standard User</p></div>`
 
-	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{})
+	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -164,7 +164,7 @@ func TestTernary_NotEqual(t *testing.T) {
 	input := `<NotBanned status='active' />`
 	expected := `<div><p>Welcome back!</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -176,7 +176,7 @@ func TestTernary_NotEqual(t *testing.T) {
 	input2 := `<NotBanned status='banned' />`
 	expected2 := `<div><p>Account suspended</p></div>`
 
-	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{})
+	result2, err := gtml.CompileHTML(input2, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -194,7 +194,7 @@ func TestTernary_WithPropExpressions(t *testing.T) {
 	input := `<ScoreCard score={75} />`
 	expected := `<div><h2>Your score: 75</h2><p>You passed!</p></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

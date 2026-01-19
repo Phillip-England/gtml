@@ -12,7 +12,7 @@ func TestError_ComponentNotFound(t *testing.T) {
 
 	input := `<NonExistentComponent />`
 
-	_, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	_, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err == nil {
 		t.Error("expected error for non-existent component, got nil")
 	}
@@ -28,7 +28,7 @@ func TestError_UndefinedVariable(t *testing.T) {
 
 	input := `<Test x={1} />`
 
-	_, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	_, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err == nil {
 		t.Error("expected error for undefined variable, got nil")
 	}
@@ -44,7 +44,7 @@ func TestError_TypeMismatch(t *testing.T) {
 
 	input := `<Counter count='not a number' />`
 
-	_, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	_, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err == nil {
 		t.Error("expected error for type mismatch, got nil")
 	}

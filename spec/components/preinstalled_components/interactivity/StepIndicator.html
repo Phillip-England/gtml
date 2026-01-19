@@ -1,0 +1,26 @@
+<div props='steps string, currentStep int' class='step-indicator'>
+  <div class='steps'>
+    <slot name='steps' />
+  </div>
+  <div class='progress-info'>
+    Step {$currentStep + 1} of {$totalSteps}
+  </div>
+  <script type='gtml'>
+    $totalSteps = 3
+  </script>
+</div>
+
+<style>
+  .step-indicator {
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .progress-info {
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 600;
+    color: #666;
+  }
+</style>

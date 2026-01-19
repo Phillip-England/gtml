@@ -14,7 +14,7 @@ func TestSlot_BasicSlot(t *testing.T) {
 	input := `<PageLayout><slot name='content' tag='main'><p>Hello World</p></slot></PageLayout>`
 	expected := `<html><body><header>Site Header</header><main><p>Hello World</p></main><footer>Site Footer</footer></body></html>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -32,7 +32,7 @@ func TestSlot_MultipleSlots(t *testing.T) {
 	input := `<TwoColumnLayout><slot name='sidebar' tag='aside'><nav>Navigation</nav></slot><slot name='main' tag='section'><p>Main content here</p></slot></TwoColumnLayout>`
 	expected := `<div class='container'><aside><nav>Navigation</nav></aside><section><p>Main content here</p></section></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -50,7 +50,7 @@ func TestSlot_WithClass(t *testing.T) {
 	input := `<Layout><slot name='content' tag='div' class='my-class'><p>Content</p></slot></Layout>`
 	expected := `<div><div class='my-class'><p>Content</p></div></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -68,7 +68,7 @@ func TestSlot_EmptySlot(t *testing.T) {
 	input := `<Layout></Layout>`
 	expected := `<div></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -87,7 +87,7 @@ func TestSlot_NestedComponentInSlot(t *testing.T) {
 	input := `<Card><slot name='actions' tag='div'><Button label='Click Me' /></slot></Card>`
 	expected := `<div class="card"><div><button>Click Me</button></div></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -105,7 +105,7 @@ func TestSlot_OrderIndependence(t *testing.T) {
 	input := `<Layout><slot name='footer' tag='footer'>Footer Content</slot><slot name='header' tag='header'>Header Content</slot></Layout>`
 	expected := `<div><header>Header Content</header><footer>Footer Content</footer></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

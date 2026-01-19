@@ -1,0 +1,47 @@
+<div props='stepNumber int, label string, isComplete boolean' class='step-item {$isActive ? "active" : ""} {$isComplete ? "complete" : ""}'>
+  <div class='step-number'>
+    <span class='check'>{$isComplete ? "✓" : $stepNumber}</span>
+  </div>
+  <span class='step-label'>{label}</span>
+  <script type='gtml'>
+    $isActive = false
+  </script>
+</div>
+
+<style>
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0e0e0;
+    color: #666;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .step-item.active .step-number {
+    background: #4a90d9;
+    color: white;
+  }
+  .step-item.complete .step-number {
+    background: #4caf50;
+    color: white;
+  }
+  .step-label {
+    font-weight: 500;
+    color: #666;
+  }
+  .step-item.active .step-label {
+    color: #333;
+  }
+</style>

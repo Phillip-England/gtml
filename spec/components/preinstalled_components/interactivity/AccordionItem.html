@@ -1,0 +1,57 @@
+<div props='title string' class='accordion-item {$isOpen ? "open" : ""}'>
+  <button id='toggleBtn' class='header'>
+    <span class='title'>{title}</span>
+    <span class='arrow'>{$isOpen ? "▼" : "▶"}</span>
+  </button>
+  <div class='content'>
+    <slot name='content' />
+  </div>
+  <script type='gtml'>
+    $isOpen = false
+    #toggleBtn.onclick(() => {
+      $isOpen = !$isOpen
+    })
+  </script>
+</div>
+
+<style>
+  .accordion-item {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border: none;
+    background: #fafafa;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .header:hover {
+    background: #f0f0f0;
+  }
+  .title {
+    font-weight: 600;
+    color: #333;
+  }
+  .arrow {
+    color: #999;
+    transition: transform 0.3s;
+  }
+  .content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .accordion-item.open .content {
+    max-height: 500px;
+  }
+  .accordion-item.open .arrow {
+    transform: rotate(0deg);
+  }
+</style>

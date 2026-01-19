@@ -15,7 +15,7 @@ func TestCombined_SlotWithDrilledProp(t *testing.T) {
 	input := `<Container title='My Page'><slot name='content' tag='main'><Button text='Click' /></slot></Container>`
 	expected := `<div>My Page<main><button>Click</button></main></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -34,7 +34,7 @@ func TestCombined_FullLayoutExample(t *testing.T) {
 	input := `<GuestLayout title="Some Title"><slot name='content' tag='div'><p>Some Content</p><BasicButton text='Click Me' /></slot></GuestLayout>`
 	expected := `<html><head><title>Some Title</title></head><body><button>Some Title</button><div><p>Some Content</p><button>Click Me</button></div></body></html>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

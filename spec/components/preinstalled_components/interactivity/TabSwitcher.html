@@ -1,0 +1,11 @@
+<div props='tabs string' class='tab-switcher'>
+  <div class='tab-headers'>
+    <slot name='tab-headers' />
+  </div>
+  <div class='tab-content'>
+    <slot name='tab-content' />
+  </div>
+  <script type='gtml'>
+    $activeTab = 0
+  </script>
+</div>

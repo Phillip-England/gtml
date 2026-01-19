@@ -336,7 +336,7 @@ func TestFetchInComponent(t *testing.T) {
 	})
 
 	html := `<UserList apiUrl='localhost:8080/api/users' />`
-	result, err := gtml.CompileHTML(html, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(html, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("CompileHTML failed: %v", err)
 	}

@@ -1,0 +1,50 @@
+<div props='initialCount int' class='like-button'>
+  <button id='likeBtn' class='btn {$isLiked ? "liked" : ""}'>
+    <span class='icon'>{$isLiked ? "❤️" : "🤍"}</span>
+    <span class='count'>{$count}</span>
+  </button>
+  <script type='gtml'>
+    $isLiked = false
+    $count = $initialCount
+    #likeBtn.onclick(() => {
+      $isLiked = !$isLiked
+      $count = $count + ($isLiked ? 1 : -1)
+    })
+  </script>
+</div>
+
+<style>
+  .like-button {
+    display: inline-block;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+  }
+  .btn.liked {
+    border-color: #ff6b6b;
+    background: #fff0f0;
+  }
+  .icon {
+    font-size: 18px;
+  }
+  .count {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+  }
+  .btn.liked .count {
+    color: #ff6b6b;
+  }
+</style>

@@ -15,7 +15,7 @@ func TestDrill_BasicDrilling(t *testing.T) {
 	input := `<SomeLayout heading='some heading' />`
 	expected := `<div><h1>some heading</h1><div><p>some heading</p></div></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -35,7 +35,7 @@ func TestDrill_MultiLevelDrilling(t *testing.T) {
 	input := `<TopComponent info='drilled value' />`
 	expected := `<section><div><span>drilled value</span></div></section>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -54,7 +54,7 @@ func TestDrill_MultipleDrills(t *testing.T) {
 	input := `<Container heading='My Title' description='My Description' />`
 	expected := `<article><div><h1>My Title</h1><p>My Description</p></div></article>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -73,7 +73,7 @@ func TestDrill_WithTransformation(t *testing.T) {
 	input := `<Wrapper base={5} />`
 	expected := `<div><span>10</span></div>`
 
-	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{})
+	result, err := gtml.CompileHTML(input, state, map[string]gtml.Value{}, true)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
