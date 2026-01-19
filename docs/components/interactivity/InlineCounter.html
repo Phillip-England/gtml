@@ -1,0 +1,39 @@
+<div props='initialValue int' class='inline-counter'>
+  <p class='count-display'>Count: <span data-gtml-signal-value='count'></span></p>
+  <button onclick={() => {
+    $count = $count - 1
+  }}>-</button>
+  <button onclick={() => {
+    $count = $count + 1
+  }}>+</button>
+</div>
+
+<style>
+  .inline-counter {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .count-display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 20px;
+  }
+  .inline-counter button {
+    padding: 10px 24px;
+    font-size: 18px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #4a90d9;
+    color: white;
+    transition: background 0.2s;
+  }
+  .inline-counter button:hover {
+    background: #357abd;
+  }
+</style>

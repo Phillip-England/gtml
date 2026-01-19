@@ -1,0 +1,50 @@
+<div props='maxCount int' class='input-counter'>
+  <p class='count-display'>Count: <span data-gtml-signal-value='count'></span></p>
+  <button id='incrementBtn'>+</button>
+  <button id='decrementBtn'>-</button>
+  <button id='resetBtn'>Reset</button>
+  <script type='gtml'>
+    $count = 0
+    $max = $maxCount
+    #incrementBtn.onclick(() => {
+      $count = $count + 1
+    })
+    #decrementBtn.onclick(() => {
+      $count = $count - 1
+    })
+    #resetBtn.onclick(() => {
+      $count = 0
+    })
+  </script>
+</div>
+
+<style>
+  .input-counter {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .count-display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 20px;
+  }
+  .input-counter button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 0 5px;
+    border: 2px solid #9b59b6;
+    border-radius: 8px;
+    background: white;
+    color: #9b59b6;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .input-counter button:hover {
+    background: #9b59b6;
+    color: white;
+  }
+</style>

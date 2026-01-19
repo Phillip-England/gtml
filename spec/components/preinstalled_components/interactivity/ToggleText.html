@@ -1,0 +1,41 @@
+<div props='initialText string' class='toggle-text'>
+  <p class='display'>{$currentText}</p>
+  <button id='toggleBtn' class='toggle-btn'>Toggle Text</button>
+  <script type='gtml'>
+    $currentText = $initialText
+    $alternateText = "Alternate Text"
+    #toggleBtn.onclick(() => {
+      $currentText = $currentText === $initialText ? $alternateText : $initialText
+    })
+  </script>
+</div>
+
+<style>
+  .toggle-text {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 20px;
+  }
+  .toggle-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 2px solid #27ae60;
+    border-radius: 8px;
+    background: white;
+    color: #27ae60;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .toggle-btn:hover {
+    background: #27ae60;
+    color: white;
+  }
+</style>

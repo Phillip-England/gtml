@@ -1,0 +1,46 @@
+<div props='startEnabled boolean' class='inline-toggle'>
+  <p class='status'>{$enabled ? "ON" : "OFF"}</p>
+  <button class='toggle-btn {$enabled ? "on" : ""}' onclick={() => {
+    $enabled = !$enabled
+  }}>
+    {$enabled ? "Turn Off" : "Turn On"}
+  </button>
+</div>
+
+<style>
+  .inline-toggle {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+  .status {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 10px 0 20px;
+    color: #333;
+  }
+  .toggle-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    background: white;
+    color: #e74c3c;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .toggle-btn:hover {
+    background: #e74c3c;
+    color: white;
+  }
+  .toggle-btn.on {
+    border-color: #27ae60;
+    color: #27ae60;
+  }
+  .toggle-btn.on:hover {
+    background: #27ae60;
+    color: white;
+  }
+</style>

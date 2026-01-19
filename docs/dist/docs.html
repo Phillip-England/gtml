@@ -77,6 +77,100 @@
     background: #357abd;
   }
 
+/* InlineCounter */
+[data-inlinecounter] .inline-counter, .inline-counter[data-inlinecounter] {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+[data-inlinecounter] .count-display, .count-display[data-inlinecounter] {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 20px;
+  }
+[data-inlinecounter] .inline-counter button, .inline-counter button[data-inlinecounter] {
+    padding: 10px 24px;
+    font-size: 18px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #4a90d9;
+    color: white;
+    transition: background 0.2s;
+  }
+[data-inlinecounter] .inline-counter button:hover, .inline-counter button:hover[data-inlinecounter] {
+    background: #357abd;
+  }
+
+/* InlineLike */
+[data-inlinelike] .inline-like, .inline-like[data-inlinelike] {
+    display: inline-block;
+  }
+[data-inlinelike] .like-btn, .like-btn[data-inlinelike] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+[data-inlinelike] .like-btn:hover, .like-btn:hover[data-inlinelike] {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+  }
+[data-inlinelike] .like-btn.liked, .like-btn.liked[data-inlinelike] {
+    border-color: #ff6b6b;
+    background: #fff0f0;
+  }
+[data-inlinelike] .icon, .icon[data-inlinelike] {
+    font-size: 18px;
+  }
+
+/* InlineToggle */
+[data-inlinetoggle] .inline-toggle, .inline-toggle[data-inlinetoggle] {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+  }
+[data-inlinetoggle] .status, .status[data-inlinetoggle] {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 10px 0 20px;
+    color: #333;
+  }
+[data-inlinetoggle] .toggle-btn, .toggle-btn[data-inlinetoggle] {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    background: white;
+    color: #e74c3c;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+[data-inlinetoggle] .toggle-btn:hover, .toggle-btn:hover[data-inlinetoggle] {
+    background: #e74c3c;
+    color: white;
+  }
+[data-inlinetoggle] .toggle-btn.on, .toggle-btn.on[data-inlinetoggle] {
+    border-color: #27ae60;
+    color: #27ae60;
+  }
+[data-inlinetoggle] .toggle-btn.on:hover, .toggle-btn.on:hover[data-inlinetoggle] {
+    background: #27ae60;
+    color: white;
+  }
+
 /* LikeButton */
 [data-likebutton] .like-button, .like-button[data-likebutton] {
     display: inline-block;

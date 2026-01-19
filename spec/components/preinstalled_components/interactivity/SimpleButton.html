@@ -1,0 +1,29 @@
+<div props='buttonText string' class='simple-button'>
+  <button id='btn'>{$buttonText}</button>
+  <script type='gtml'>
+    $clicked = false
+    #btn.onclick(() => {
+      $clicked = !$clicked
+    })
+  </script>
+</div>
+
+<style>
+  .simple-button {
+    display: inline-block;
+  }
+  .simple-button button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 2px solid #4a90d9;
+    border-radius: 8px;
+    background: white;
+    color: #4a90d9;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .simple-button button:hover {
+    background: #4a90d9;
+    color: white;
+  }
+</style>
